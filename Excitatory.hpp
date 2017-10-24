@@ -13,7 +13,7 @@ class Excitatory: public Neuron{
 	public:
 		//Constructeur et destructeur
 		Excitatory();
-		static constexpr unsigned int nb_excit = 10000;
+		static constexpr unsigned int nb_excit = 100;
 	
 	
 };

@@ -20,6 +20,7 @@ class Neuron{
 		const int step=1; //remplace le pas de temps h
 		const double c1=exp(-(h/tau));
 		const double c2=R*(1-c1);
+		const unsigned int D=15; //Delay
 		const unsigned int Dmax=16; //Maximal delay of transmission + 1 & delay of 16 means 1.6ms 
 		
 
@@ -37,8 +38,8 @@ class Neuron{
 		//Constante de classe publique
 		static constexpr double h=0.1; //pas de temps h = 0.1 ms
 		static constexpr double V_ext=0.02; //V_ext= 2* V_th/(1000*0.1*20)
-		static constexpr unsigned int Ce=1000; //Number of excitatory connexion
-		static constexpr unsigned int Ci=250; //Number of inhibitory connexion
+		static constexpr unsigned int Ce=10; //Number of excitatory connexion
+		static constexpr unsigned int Ci=2; //Number of inhibitory connexion
 		
 		
 		//Constructeur et destructeur
@@ -49,6 +50,7 @@ class Neuron{
 		double getPotential() const;
 		double getResistance() const;
 		double getWeight() const;
+		double getDelay() const;
 		unsigned int getSpikesNumber() const;
 		std::vector<double> getSpikesTime() const;
 		

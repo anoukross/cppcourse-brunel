@@ -29,6 +29,10 @@ double Neuron::getWeight() const{
 	return J;
 }
 
+double Neuron::getDelay() const{
+	return D;
+}
+
 unsigned int Neuron::getSpikesNumber() const{
 	return spikesNumber;
 }
@@ -67,7 +71,7 @@ bool Neuron::update(double I, unsigned int time){
 		double V_new(c1*V+I*c2+d(gen)); //I= external current is equal to 0
 		if(incoming_spikes[clock%Dmax]>0.0){ //If a spike is associated with the current time, we add it to the new potential
 			V_new+=incoming_spikes[clock%Dmax];
-			std::cout << "Neuron " << indice+1 << " has received a spike at time " << time*h << " ms." <<std::endl;	//cannot spike at t=0
+			//std::cout << "Neuron " << indice+1 << " has received a spike at time " << time*h << " ms." <<std::endl;	//cannot spike at t=0
 			incoming_spikes[clock%Dmax]=0.0; //Reinitialisation of the value of my buffer corresponding to [clock%Dmax[ that have just been used
 		}
 		
@@ -76,7 +80,7 @@ bool Neuron::update(double I, unsigned int time){
 			spikesNumber+=1;
 			V_new=V_reset; //After  a spike, the potential gets back to its reset value	
 			hasSpiked=true;	
-			std::cout << "Neuron " << indice+1 << " has spiked at time: " << time*h << " ms." << std::endl;
+			//std::cout << "Neuron " << indice+1 << " has spiked at time: " << time*h << " ms." << std::endl;
 			}
 		
 		V=V_new; //modify neuron potential

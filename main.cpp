@@ -33,20 +33,13 @@ int main(){
 					for(unsigned int j(0); j<net.getNetwork().size(); ++j){
 						if(i!=j){
 							double weight(net.getCurrentWeights()[i][j]);
-							
-							double external_current(0.0);
-							
-							if(i==0){ //If it is the first neuron of my network it has got an external current
-								external_current=I;
-							}
-							net.connect(i,j, weight, external_current, t);
+							net.connect(i,j, weight, I, t);
 						}
 						
 					}
 				
 					out << "A temps: " << t*Neuron::h << " ms, le potentiel de membrane du neurone " << i+1 <<  " est: " << net.getNetwork()[i]->getPotential() << "." << endl;
 				}
-				//out << net.getNetwork()[1]->getPotential() << endl;
 			}
 		}
 	

@@ -5,16 +5,17 @@
 #include "Excitatory.hpp"
 #include "Inhibitory.hpp"
 #include <vector>
+#include <array>
 
 
-
+class Inhibitory;
+class Excitatory;
 class Network{
-	private: 
+	private:
 	
 		std::vector<Neuron*> my_network; 
-		std::vector<std::vector<bool>> targets; 
-		std::vector<std::vector<double>> current_weights; 
-		std::vector<std::vector<unsigned int>> delay;
+		std::array<std::array<bool, Inhibitory::nb_inhib+Excitatory::nb_excit>, Inhibitory::nb_inhib+Excitatory::nb_excit> targets; 
+		std::array<std::array<double ,Inhibitory::nb_inhib+Excitatory::nb_excit> ,Inhibitory::nb_inhib+Excitatory::nb_excit> current_weights; 
 		
 	public:
 	
@@ -24,7 +25,7 @@ class Network{
 		
 	//Getters
 	std::vector<Neuron*> getNetwork() const;
-	std::vector<std::vector<double>> getCurrentWeights() const;
+	std::array<std::array<double,  Inhibitory::nb_inhib+Excitatory::nb_excit> , Inhibitory::nb_inhib+Excitatory::nb_excit> getCurrentWeights() const;
 		
 	//Connexion
 	void connect(unsigned int from, unsigned int to, double weight, double ext_current, unsigned int time);

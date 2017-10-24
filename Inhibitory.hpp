@@ -13,7 +13,7 @@ class Inhibitory: public Neuron{
 		
 	public:
 		Inhibitory();
-		static constexpr unsigned int nb_inhib = 2500;
+		static constexpr unsigned int nb_inhib = 25;
 	
 	
 };
