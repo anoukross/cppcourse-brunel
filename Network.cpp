@@ -25,7 +25,7 @@ Network::Network()
 		Inhibitory* ni(nullptr);
 		ni = new Inhibitory(); 
 		my_network.push_back(ni);
-		std:: cout << weight << std:: endl;
+		double weight(my_network[Excitatory::nb_excit]->getWeight());
 		for(unsigned int i(0); i<Inhibitory::nb_inhib; ++i){
 			for(unsigned int j(0); j<Inhibitory::nb_inhib; ++j){
 			targets[i][j]=false; //Initialise toute les connexions à fausse
