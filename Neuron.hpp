@@ -46,8 +46,8 @@ class Neuron{
 		*  public static attributs of the class Neuron
 		* Do not change from one neurons to another and need to be accessed from outside the class -> no getter because static method should not be constant
 		*/
-		static constexpr unsigned int Ce_=10; /**< Ce_ = Number of excitatory connexion of one neuron */
-		static constexpr unsigned int Ci_=2; /**< Ci_ = Number of excitatory connexion of one neuron */
+		static constexpr unsigned int Ce_=10; /**< Ce_ = Number of excitatory connexion of one neuron -> 1000 */
+		static constexpr unsigned int Ci_=2; /**< Ci_ = Number of excitatory connexion of one neuron -> 250 */
 		static constexpr double h_=0.1; /**< h = step of time in 0.1 ms */
 		
 		

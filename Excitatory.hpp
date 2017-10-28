@@ -14,7 +14,7 @@ class Excitatory: public Neuron{
 		/**
 		*  Constructor
 		* calls the constructor of Neuron with index and the amplitude of the postsynaptic current for the excitatory neurons (Je) = 0.1 mV
-        * @param index  the index of the excitaory neuron going from 0 to nb_excit-1(9999)
+        * @param index  the index of the excitaory neuron goes from 0 to nb_excit-1(10000-1)
         */
 		Excitatory(unsigned int index);
 

@@ -2,18 +2,27 @@
 #include <cassert>
 #include <random>
 
-//Constructeur
+/**
+*  Constructor
+*/
 Neuron::Neuron(unsigned int index, double J, double V)
 : J_(J), V_(V), index_(index), spikes_number_(0), clock_(0)
 {
+	/*! \brief At the beggining of the simulation, the neurons have not yet received a postsynaptic current
+	 * ->Every compartment of incoming_spikes_ should equal 0.0
+	 */
 	for(unsigned int i(0);i<Dmax_;++i){
 		incoming_spikes_[i]=0.0;
 	}
 	
-	spikes_time_.clear(); //To be sure that when we create a neuron it has got no spikes time 
+	/*! \brief To be sure that when we create a neuron, it has got not spike time
+	 */
+	spikes_time_.clear(); 
 }
 		
-//Getters
+/**
+*  Getters
+*/
 double Neuron::getPotential() const{
 	return V_;
 }
@@ -41,7 +50,9 @@ std::vector<double> Neuron::getSpikesTime() const{
 	return spikes_time_;
 }
 
-//Setters
+/**
+*  Setter
+*/
 void Neuron::setPotential(double V){
 	V_=V;
 }
@@ -50,13 +61,19 @@ void Neuron::setPotential(double V){
 void Neuron::receive_spikes(double J){
 	unsigned int t_spike = (D_+clock_)%Dmax_;
 	assert(t_spike < incoming_spikes_.size());
-	incoming_spikes_[t_spike]+=J; //We add the weight of the postsynaptic current in the buffer compartment corresponding to (delay+clock)%Dmax
+	/*! \brief the amplitude of the postsynaptic current is added in the buffer's compartment corresponding to (D_+clock_)%Dmax_ 
+	*/
+	incoming_spikes_[t_spike]+=J; 
 }
 
 //bool
 bool Neuron::isRefractory(){
-	if(spikes_number_>=1){ //If it has already spiked
-		if((clock_-spikes_time_[spikes_number_-1]) <= (tau_ref_/h_)){ //if the current time - the last spike time is smaller than the refractory period
+	/*! \brief check if it has already spiked, otherwise it cannot be in the refractory period
+	*/
+	if(spikes_number_>=1){ 
+		/*! \brief check if the current time - the last spike time is smaller than the refractory period
+		*/
+		if((clock_-spikes_time_[spikes_number_-1]) <= (tau_ref_/h_)){ 
 			return true;
 		}
 	}
@@ -64,31 +81,59 @@ bool Neuron::isRefractory(){
 }
 
 		
-//Update
+/**
+*  Update
+*/
 bool Neuron::update(double I, unsigned int time){
 	bool hasSpiked(false);
-	if(!isRefractory()){ //If neuron is refractory -> neuron has spiked -> V is not modified
+	/*! \brief If neuron is refractory -> neuron has spiked -> V will not be modified
+	 */
+	if(!isRefractory()){ 
+		/*! \brief Creation of a random device
+		*/
 		std::random_device rd;
 		std::mt19937 gen(rd());
+		
+		/*! \brief The random generator follows a poisson distribution with λ = V_ext_*J_*h_ *Ce_
+		 */
 		std::poisson_distribution<> d(V_ext_*J_*h_ *Ce_);
-		double V_new(c1_*V_+I*c2_+d(gen)); //I= external current is equal to 0
-		if(incoming_spikes_[clock_%Dmax_]>0.0){ //If a spike is associated with the current time, we add it to the new potential
+		
+		/*! \brief The external current I is equal to 0
+		 */
+		double V_new(c1_*V_+I*c2_+d(gen)); 
+		
+		/*! \brief If a spike is associated with the current time, we add it to the new potential
+		 */
+		if(incoming_spikes_[clock_%Dmax_]>0.0){
 			V_new+=incoming_spikes_[clock_%Dmax_];
 			//std::cout << "Neuron " << indice+1 << " has received a spike at time " << time*h << " ms." <<std::endl;	//cannot spike at t=0
-			incoming_spikes_[clock_%Dmax_]=0.0; //Reinitialisation of the value of my buffer corresponding to [clock%Dmax[ that have just been used
+			
+			/*! \brief Reinitialisation of the value of my buffer corresponding to the compartment [clock%Dmax] that have just been used
+			*/
+			incoming_spikes_[clock_%Dmax_]=0.0; 
 		}
 		
+		
+		/*! \brief A spike occurres if the membrane potential is greater than the membrane potential threshold
+		*/
 		if(V_new > V_th_){
 			spikes_time_.push_back(clock_); 
 			spikes_number_+=1;
-			V_new=V_reset_; //After  a spike, the potential gets back to its reset value	
+			
+			/*! \brief After  a spike, the potential gets back to its reset value
+			*/
+			V_new=V_reset_; 	
 			hasSpiked=true;	
 			//std::cout << "Neuron " << indice+1 << " has spiked at time: " << time*h << " ms." << std::endl;
 			}
 		
-		V_=V_new; //modify neuron potential
+		/*! \brief Modifies the attribute membrane potential V_
+			*/
+		V_=V_new;
 	}
 	
+	/*! \brief The local clock of my neuron is incremented at the end of the update
+	*/
 	++clock_; 
 	
 		
