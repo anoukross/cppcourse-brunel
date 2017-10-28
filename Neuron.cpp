@@ -1,59 +1,62 @@
-#include "Neuron.hpp"
-#include <cmath>
 #include "Network.hpp"
-#include <iostream>
 #include <cassert>
 #include <random>
 
-//Constructeur et destructeur
-Neuron::Neuron(double weight, double potential)
-: J(weight), V(potential), indice(0), spikesNumber(0.0), clock(0)
+//Constructeur
+Neuron::Neuron(unsigned int index, double J, double V)
+: J_(J), V_(V), index_(index), spikes_number_(0), clock_(0)
 {
-	for(unsigned int i(0);i<Dmax;++i){
-		incoming_spikes.push_back(0.0);
+	for(unsigned int i(0);i<Dmax_;++i){
+		incoming_spikes_[i]=0.0;
 	}
 	
-	spikesTime.clear(); //To be sure that when we create a neuron it has got no spikes time 
+	spikes_time_.clear(); //To be sure that when we create a neuron it has got no spikes time 
 }
-Neuron::~Neuron(){}
 		
 //Getters
 double Neuron::getPotential() const{
-	return V;
+	return V_;
 }
 double Neuron::getResistance() const{
-	return R;
+	return R_;
 }
 
 double Neuron::getWeight() const{
-	return J;
+	return J_;
 }
 
 double Neuron::getDelay() const{
-	return D;
+	return D_;
+}
+
+
+unsigned int Neuron::getIndex() const{
+	return index_;
 }
 
 unsigned int Neuron::getSpikesNumber() const{
-	return spikesNumber;
+	return spikes_number_;
 }
 std::vector<double> Neuron::getSpikesTime() const{
-	return spikesTime;
+	return spikes_time_;
 }
 
 //Setters
-void Neuron::setPotential(double potential){
-	V=potential;
+void Neuron::setPotential(double V){
+	V_=V;
 }
-void Neuron::receive_spikes(unsigned int delay, double weight){
-	unsigned int t_spike = (delay+clock)%Dmax;
-	assert(t_spike < incoming_spikes.size());
-	incoming_spikes[t_spike]+=weight; //Ww add the weight of the postsynaptic current in the buffer compartment corresponding to (delay+clock)%Dmax
+
+//Receive spikes
+void Neuron::receive_spikes(double J){
+	unsigned int t_spike = (D_+clock_)%Dmax_;
+	assert(t_spike < incoming_spikes_.size());
+	incoming_spikes_[t_spike]+=J; //We add the weight of the postsynaptic current in the buffer compartment corresponding to (delay+clock)%Dmax
 }
 
 //bool
 bool Neuron::isRefractory(){
-	if(spikesNumber>=1){ //If it has already spiked
-		if((clock-spikesTime[spikesNumber-1]) <= (tau_ref/h)){ //if the current time - the last spike time is smaller than the refractory period
+	if(spikes_number_>=1){ //If it has already spiked
+		if((clock_-spikes_time_[spikes_number_-1]) <= (tau_ref_/h_)){ //if the current time - the last spike time is smaller than the refractory period
 			return true;
 		}
 	}
@@ -67,26 +70,26 @@ bool Neuron::update(double I, unsigned int time){
 	if(!isRefractory()){ //If neuron is refractory -> neuron has spiked -> V is not modified
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::poisson_distribution<> d(V_ext*J*h*Ce);
-		double V_new(c1*V+I*c2+d(gen)); //I= external current is equal to 0
-		if(incoming_spikes[clock%Dmax]>0.0){ //If a spike is associated with the current time, we add it to the new potential
-			V_new+=incoming_spikes[clock%Dmax];
+		std::poisson_distribution<> d(V_ext_*J_*h_ *Ce_);
+		double V_new(c1_*V_+I*c2_+d(gen)); //I= external current is equal to 0
+		if(incoming_spikes_[clock_%Dmax_]>0.0){ //If a spike is associated with the current time, we add it to the new potential
+			V_new+=incoming_spikes_[clock_%Dmax_];
 			//std::cout << "Neuron " << indice+1 << " has received a spike at time " << time*h << " ms." <<std::endl;	//cannot spike at t=0
-			incoming_spikes[clock%Dmax]=0.0; //Reinitialisation of the value of my buffer corresponding to [clock%Dmax[ that have just been used
+			incoming_spikes_[clock_%Dmax_]=0.0; //Reinitialisation of the value of my buffer corresponding to [clock%Dmax[ that have just been used
 		}
 		
-		if(V_new > V_th){
-			spikesTime.push_back(clock); 
-			spikesNumber+=1;
-			V_new=V_reset; //After  a spike, the potential gets back to its reset value	
+		if(V_new > V_th_){
+			spikes_time_.push_back(clock_); 
+			spikes_number_+=1;
+			V_new=V_reset_; //After  a spike, the potential gets back to its reset value	
 			hasSpiked=true;	
 			//std::cout << "Neuron " << indice+1 << " has spiked at time: " << time*h << " ms." << std::endl;
 			}
 		
-		V=V_new; //modify neuron potential
+		V_=V_new; //modify neuron potential
 	}
 	
-	++clock; 
+	++clock_; 
 	
 		
 	return hasSpiked;

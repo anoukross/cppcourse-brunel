@@ -4,16 +4,20 @@
 #include "Neuron.hpp"
 
 
+/**
+ *  The Excitatory class which is a subclass of Neuron
+ */
 
-
-class Excitatory: public Neuron{
-	private: 
-	
-		
+class Excitatory: public Neuron{	
 	public:
-		//Constructeur et destructeur
-		Excitatory();
-		static constexpr unsigned int nb_excit = 100;
+		
+		/**
+		*  Constructor
+		* calls the constructor of Neuron with index and the amplitude of the postsynaptic current for the excitatory neurons (Je) = 0.1 mV
+        * @param index  the index of the excitaory neuron going from 0 to nb_excit-1(9999)
+        */
+		Excitatory(unsigned int index);
+
 	
 	
 };

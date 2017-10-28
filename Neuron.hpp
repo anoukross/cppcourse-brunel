@@ -5,66 +5,101 @@
 #include <array>
 #include <cmath>
 
+/**
+ *  The Neuron class
+ */
 
 class Neuron{
 	private:
 	
-		//Constantes de classe
-		const double tau=20; //tau = R*C , [ms]
-		const double C=1; // capacity 1 pF=10⁻12 Farad
-		const double R=tau/C; //Membrane resistance
-		const double tau_ref=2; //tau refractory 2 ms
-		const double Erepos=10; //10mV
-		const double V_reset=0; // mV Membrane potential during the refractory time
-		const double V_th=20; //Valeur du potentiel qui cause un spike (Potential threshold)
-		const int step=1; //remplace le pas de temps h
-		const double c1=exp(-(h/tau));
-		const double c2=R*(1-c1);
-		const unsigned int D=15; //Delay
-		const unsigned int Dmax=16; //Maximal delay of transmission + 1 & delay of 16 means 1.6ms 
+		/**
+		*  Constants specific to the Neuron
+		*/
+		const double C_=1; /**< C_ = capacity 1 pF=10⁻12 Farad  */
+		const double tau_=20; /**< tau_ correspond to the membrance resistance * the Capacity (=R*C) in ms  */
+		const double R_=tau_/C_; /**< R_ = Membrane resistance */  
+		const double tau_ref_=2; /**< tau_ref_ = tau refractory which lasts 2 ms */
+		const double Erest_=10; /**< Erest_ = energy at rest which is 10mV */
+		const double V_reset_=0; /**< V_reset_ = Membrane potential during the refractory period in mV */
+		const double V_th_=20; /**<  V_th_ = Potential threshold Value of the potential which causes a spike */
+		const int step_=h_*10; /**< step_ -> one step of time corresponds to 0.1 ms, replace h, resolves the problem of the floating point */
+		const double c1_=exp(-(h_/tau_)); /** < c1_  = constant need in the calcul of the membrane potential */
+		const double c2_=R_*(1-c1_); /**< c2_ = constant need in the calcul of the membrane potential */
+		const unsigned int D_=15; /**< D_ = delay of transmission(1.5ms) between the neurons that spike and their targets */
+		static constexpr unsigned int Dmax_=16; /**< Dmax_ = Maximal delay of transmission + 1, delay of 16 corresponds to 1.6ms */
+		const double V_ext_=0.02; //V_ext_= 2* V_th/(1000*0.1*20)
 		
-
-		//atrributs
-		double V; //Membrane potential 
-		unsigned int indice;
-		unsigned int spikesNumber; //Number of spikes
-		std::vector<double> spikesTime; // The times when the spikes occured
-		unsigned int clock;
-		std::vector<double> incoming_spikes; //Each step of time is associated with the amplitude of the spikes arriving from the neighbours at that time
-		double J;
+		/**
+		*  attributs of the class Neuron
+		*/
+		double V_; /**< V_ = Membrane potential in mV */
+		unsigned int index_; /**< index_ = number attributed to one particular neuron, is between 0 and nb_neurons-1(12500-1)*/
+		unsigned int spikes_number_; /**< spikesNumber_ = number of time a neuron has spiked */
+		std::vector<double> spikes_time_; /** spikesTime_ registers the moment when the spikes of a neuron occured */
+		unsigned int clock_; /**< clock = internal clock of a neuron */
+		std::array<double, Dmax_> incoming_spikes_; /** incoming_spikes_ = buffer of the size Dmax(delay maximal +1) where each step of time is associated with the amplitude of the spikes arriving from the other neurons targeting this one  at that time */
+		double J_; /**< J_ = amplitude of the postsynaptic current J_ = 0.1mV for the excitatory and 0.5 mV for the inhibitory */
 		
 	public:
 	
-		//Constante de classe publique
-		static constexpr double h=0.1; //pas de temps h = 0.1 ms
-		static constexpr double V_ext=0.02; //V_ext= 2* V_th/(1000*0.1*20)
-		static constexpr unsigned int Ce=10; //Number of excitatory connexion
-		static constexpr unsigned int Ci=2; //Number of inhibitory connexion
+		/**
+		*  public static attributs of the class Neuron
+		* Do not change from one neurons to another and need to be accessed from outside the class -> no getter because static method should not be constant
+		*/
+		static constexpr unsigned int Ce_=10; /**< Ce_ = Number of excitatory connexion of one neuron */
+		static constexpr unsigned int Ci_=2; /**< Ci_ = Number of excitatory connexion of one neuron */
+		static constexpr double h_=0.1; /**< h = step of time in 0.1 ms */
 		
 		
-		//Constructeur et destructeur
-		Neuron(double weight, double potential=0.0); //Initialisation par défaut à 0.0
-		~Neuron();
+		/**
+		*  Constructor
+        * @param index  the index of the neuron going from 0 to nb_neurons-1(12500-1)
+        * @param J the amplitude of the postsynaptic current 0.1 mV for the excitatory neurons, 0.5 for the inhibitory
+        * @param V the membrane potential of the neuron in mV, bydefault initialisation of the membrane potential V_ at 0.0 mV
+        */
+		Neuron(unsigned int index, double J, double V=0.0); 
 		
-		//Getters
-		double getPotential() const;
-		double getResistance() const;
-		double getWeight() const;
-		double getDelay() const;
-		unsigned int getSpikesNumber() const;
-		std::vector<double> getSpikesTime() const;
+		/** 
+		 * Getters
+		 */
+		double getPotential() const; /**< @return V_, the membrane potential in mV*/
+		double getResistance() const; /**< @return R_ , the membrane resistance */
+		double getWeight() const; /**< @return J_, the amplitude of the postsynaptic current */
+		double getDelay() const; /**< @return D_, the delay of transmission between one neuron and his targets */
+		unsigned int getIndex() const; /**< @return index_, the index of the neuron, between 0 and nb_neurons-1(12500-1)*/
+		unsigned int getSpikesNumber() const; /**< @return spikes_number_ , the number of time a neuron has spikes*/
+		std::vector<double> getSpikesTime() const; /**< @return spikes_time_ , the time of the spikes that have occurred */
 		
-		//Setters
-		void setPotential(double potential);
-		void receive_spikes(unsigned int delay, double weight);
+		/** 
+		 * Setter
+		 */
+		void setPotential(double V); /**< set the membrane potential V_ to a given value V */
 		
-		//bool
+		/** 
+		 * The method receive_spikes is used whenever a neuron that has targets spikes, 
+		 * it adds in the compartment corresponding to (delay_+clock_)%Dmax_ of the buffer incoming_spikes_  the value of J
+		 * @param J the amplitude of the postsynaptic current, 0.1mV for the excitatory and 0.5 mV for the inhibitory
+		 */
+		void receive_spikes(double J); 
+		
+		/** 
+		 * @return true if the neuron is in a refractory period
+		 */
 		bool isRefractory();
 		
-		//Update
-		bool update(double I, unsigned int time); //update the neuron state from time t to time t+T, where T is n*h (h pas de temps)	
-								// I external current
-								//Returns true if a neuron has spikes
+		/** 
+		 * update the neuron state from time t to time t+T, where T is n*h (h pas de temps)
+		 * This method recalculates the mebrane potential at each step of time, except if the neuron is in his refractory period
+		 * The membrane potential is calculated by (c1_*V_+I*c2_+d(gen)) where d(gen) is a random value following a poisson distibution of (V_ext_*J_*h_ *Ce_)
+		 * It then adds, the postsynaptic current if there is one associated with the step of time @see receive_spikes(double J)
+		 * It verifies whether a neuron has spiked -> if it has, spikes_number_ is incremented and spikes_time_ record the current time
+		 * The personnal time of the neuron is finally incremented 	
+		 * @param I corresponds to the external current
+		 * @param time corresponds to the simulation time
+		 * @return true if the neuron has spiked
+		 */
+		bool update(double I, unsigned int time); 
+							
 	
 
 };

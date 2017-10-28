@@ -6,14 +6,15 @@
 
 
 
-class Inhibitory: public Neuron{
-	private: 
-		
-	
-		
+class Inhibitory: public Neuron{	
 	public:
-		Inhibitory();
-		static constexpr unsigned int nb_inhib = 25;
+	
+		/**
+		*  Constructor
+		* calls the constructor of Neuron with index and the amplitude of the postsynaptic current for the inhibitory neurons (Ji) = 0.5 mV
+        * @param index  the index of the inhibitory neuron going from nb_excit(10000) to nb_neurons -1 (12500-1)
+        */
+		Inhibitory(unsigned int index);
 	
 	
 };
