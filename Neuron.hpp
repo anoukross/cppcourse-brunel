@@ -62,23 +62,24 @@ class Neuron{
 		/** 
 		 * Getters
 		 */
-		double getPotential() const; /**< @return V_, the membrane potential in mV*/
-		double getResistance() const; /**< @return R_ , the membrane resistance */
-		double getWeight() const; /**< @return J_, the amplitude of the postsynaptic current */
-		double getDelay() const; /**< @return D_, the delay of transmission between one neuron and his targets */
-		unsigned int getIndex() const; /**< @return index_, the index of the neuron, between 0 and nb_neurons-1(12500-1)*/
-		unsigned int getSpikesNumber() const; /**< @return spikes_number_ , the number of time a neuron has spikes*/
-		std::vector<double> getSpikesTime() const; /**< @return spikes_time_ , the time of the spikes that have occurred */
+		double getPotential() const; /**< @return V_ the membrane potential in mV*/
+		double getResistance() const; /**< @return R_  the membrane resistance */
+		double getWeight() const; /**< @return J_ the amplitude of the postsynaptic current */
+		double getDelay() const; /**< @return D_ the delay of transmission between one neuron and his targets */
+		unsigned int getIndex() const; /**< @return index_ the index of the neuron, between 0 and nb_neurons-1(12500-1)*/
+		unsigned int getSpikesNumber() const; /**< @return spikes_number_  the number of time a neuron has spikes*/
+		std::vector<double> getSpikesTime() const; /**< @return spikes_time_  the time of the spikes that have occurred */
 		
 		/** 
-		 * Setter
+		 * Setter 
 		 */
-		void setPotential(double V); /**< set the membrane potential V_ to a given value V */
+		void setPotential(double V); /**<  set the membrane potential V_ to a given value V */
 		
 		/** 
 		 * The method receive_spikes is used whenever a neuron that has targets spikes, 
 		 * it adds in the compartment corresponding to (delay_+clock_)%Dmax_ of the buffer incoming_spikes_  the value of J
-		 * @param J the amplitude of the postsynaptic current, 0.1mV for the excitatory and 0.5 mV for the inhibitory
+		 * @param J the amplitude of the postsynaptic current
+		 * 0.1mV for the excitatory and 0.5 mV for the inhibitory
 		 */
 		void receive_spikes(double J); 
 		

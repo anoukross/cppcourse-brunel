@@ -29,23 +29,23 @@ class Network{
 	
 		/**
 		 * Constructor
-		 * creates all the connection between the neurons
-		 * asscribes the amplitude of the postsynaptic currrent corresponding to the nature of the neuron (excitatory or inhibitory)
-		 * Set random connexions (2500 inhibitory and 10000 excitatory) following an uniform distibution 
+		 * creates all the connection between the neurons,
+		 * it asscribes the amplitude of the postsynaptic currrent corresponding to the nature of the neuron (excitatory or inhibitory),
+		 * and set random connexions (2500 inhibitory and 10000 excitatory) following an uniform distibution 
 		*/
 		Network();
 			
 		/**
-		 * Getter
-		 * @return current_weights_ 
+		 * Getter 
 		 * current_weights_ is a tab with the amplitude of the postsynaptic current corresponding to each pair of neuron [i][j]
 		 * if i is inhibitory, current_weights_[i][j] =0.5 mV, if i is excitatory current_weights_[i][j]=0.1mV
+		 * @return current_weights_
 		*/
 		std::array<std::array<double ,nb_neurons_>, nb_neurons_> getCurrentWeights() const; 
 		
 		/**
 		 * Getter
-		 * @return targets_, the number of time the neuron(to) receives postsynaptic current from neuron(from)
+		 * @return targets_ the number of time the neuron(to) receives postsynaptic current from neuron(from)
 		*/
 		unsigned int getTargets(unsigned int from, unsigned int to) const;
 	
