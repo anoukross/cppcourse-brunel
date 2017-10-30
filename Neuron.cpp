@@ -1,6 +1,7 @@
 #include "Network.hpp"
 #include <cassert>
 #include <random>
+#include <iostream>
 
 /**
 *  Constructor
@@ -86,17 +87,17 @@ bool Neuron::isRefractory(){
 */
 bool Neuron::update(double I, unsigned int time){
 	bool hasSpiked(false);
-	/*! \brief If neuron is refractory -> neuron has spiked -> V will not be modified
+	/*! \brief If neuron is refractory -> neuron has spiked -> V will not be modified(insensitive to stimulation)
 	 */
 	if(!isRefractory()){ 
-		/*! \brief Creation of a random device
+		/*! \brief Creation of a random device, static so that it is really random
 		*/
-		std::random_device rd;
-		std::mt19937 gen(rd());
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
 		
-		/*! \brief The random generator follows a poisson distribution with λ = V_ext_*J_*h_ *Ce_
+		/*! \brief The random generator follows a poisson distribution with λ = V_ext_*h_, , static so that it is really random
 		 */
-		std::poisson_distribution<> d(V_ext_*J_*h_ *Ce_);
+		static std::poisson_distribution<> d(V_ext_*h_);
 		
 		/*! \brief The external current I is equal to 0
 		 */
@@ -106,7 +107,7 @@ bool Neuron::update(double I, unsigned int time){
 		 */
 		if(incoming_spikes_[clock_%Dmax_]>0.0){
 			V_new+=incoming_spikes_[clock_%Dmax_];
-			//std::cout << "Neuron " << indice+1 << " has received a spike at time " << time*h << " ms." <<std::endl;	//cannot spike at t=0
+			//std::cout << "Neuron " << index_ << " has received a spike at time " << time*h_ << " ms." <<std::endl;	//cannot spike at t=0
 			
 			/*! \brief Reinitialisation of the value of my buffer corresponding to the compartment [clock%Dmax] that have just been used
 			*/
@@ -124,7 +125,7 @@ bool Neuron::update(double I, unsigned int time){
 			*/
 			V_new=V_reset_; 	
 			hasSpiked=true;	
-			//std::cout << "Neuron " << indice+1 << " has spiked at time: " << time*h << " ms." << std::endl;
+			//std::cout << "Neuron " << index_ << " has spiked at time: " << time*h_ << " ms." << std::endl;
 			}
 		
 		/*! \brief Modifies the attribute membrane potential V_

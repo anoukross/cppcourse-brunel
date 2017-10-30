@@ -2,12 +2,12 @@
 #define EXCITATORY_HPP
 
 #include "Neuron.hpp"
+#include "Network.hpp"
 
 
 /**
  *  The Excitatory class which is a subclass of Neuron
  */
-
 class Excitatory: public Neuron{	
 	public:
 		

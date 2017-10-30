@@ -5,6 +5,7 @@
 #include <iostream>
 #include <array>
 #include <fstream>
+#include <cassert>
 
 using namespace std;
 
@@ -14,6 +15,7 @@ using namespace std;
 
 int main(){
 	Network net; /**< created a network composed 12500 neurons, @see Network  */
+	
 	
 	vector<Neuron> all_neurons; /**< creation of a tab which will contain the neurons  */
 	
@@ -38,7 +40,7 @@ int main(){
 	cout << endl;
 	
 	
-	ofstream out("simulator.txt"); /**< will write and create if necessary on a file simulator.txt */
+	ofstream out("spikes.txt"); /**< will write and create if necessary on a file simulator.txt */
 	unsigned int steps_number(stop_time/Neuron::h_); /**< steps_number corresponds to the stop time dividedby h to get an integer */
 	
 		for(unsigned int t(start_time/Neuron::h_); t<steps_number; ++t){
@@ -51,28 +53,26 @@ int main(){
 			*/
 			} else if (t>0) {
 				for(unsigned int i(0); i<Network::nb_neurons_; ++i){
-					for(unsigned int j(0); j<Network::nb_neurons_; ++j){
-						unsigned int connected_to(net.getTargets(i,j)); /**< connect_to corresponds to the number of time nj is a target of ni */
-						/*! \brief check whether ni has spikes and if nj is a target of ni
-						*/
-							if(all_neurons[i].update(I, t) and connected_to>0){ 
-								for(unsigned int a(0); a<connected_to; ++a){
-									/*! \brief set in the buffer the incoming spikes, @ see Neuron::incoming_spikes_
-									*/
-									all_neurons[j].receive_spikes(net.getCurrentWeights()[i][j]); 
-									/*! \brief j is gets the connect from neuron i according to  the number connected_to
-									*/
-									all_neurons[j].update(I, t); 
-								} 
+					assert(i<all_neurons.size());
+					if(all_neurons[i].update(I, t)){ //If the neuron i has spiked
+						assert(all_neurons[i].getSpikesNumber()>0);
+						out << t*Neuron::h_  << '\t' << i << '\n';
+							/*! \brief set in the buffer the incoming spikes, @ see Neuron::incoming_spikes_
+							*/
+							array<unsigned int, Network::Cei_> targets(net.getTargets(i));
+							for(unsigned int j(0); j<targets.size();++j){
+								assert(j<targets.size());
+								all_neurons[targets[j]].receive_spikes(net.getCurrentWeights()[i][j]);
 							}
-						
-						
 					}
-				
-					//out << "A temps: " << t*Neuron::h << " ms, le potentiel de membrane du neurone " << i+1 <<  " est: " << all_neurons[i].getPotential() << "." << endl;
+						
+						
+
+						//out << "A temps: " << t*Neuron::h_ << " ms, le potentiel de membrane du neurone " << i <<  " est: " << all_neurons[i].getPotential() << "." << '\n';
+					
 				}
 			}
-		}
+		} 
 	
 	
 	return 0;

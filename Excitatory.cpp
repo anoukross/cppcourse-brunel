@@ -12,6 +12,7 @@ Excitatory::Excitatory(unsigned int index)
 {
 /*! \brief The index of the excitatory neuron should be between 0 and nb_excit -1 (10000-1)
 */
-assert(index < 10000);  
+assert(index < Network::nb_excit_);  
 assert(index>= 0);
 }
+

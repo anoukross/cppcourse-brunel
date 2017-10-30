@@ -2,10 +2,11 @@
 #define INHIBITORY_HPP
 
 #include "Neuron.hpp"
+#include "Network.hpp"
 
-
-
-
+/**
+ *  The Inhibitory class which is a subclass of Neuron
+ */
 class Inhibitory: public Neuron{	
 	public:
 	

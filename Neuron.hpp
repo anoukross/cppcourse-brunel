@@ -5,6 +5,8 @@
 #include <array>
 #include <cmath>
 
+class Network;
+
 /**
  *  The Neuron class
  */
@@ -17,7 +19,7 @@ class Neuron{
 		*/
 		const double C_=1; /**< C_ = capacity 1 pF=10⁻12 Farad  */
 		const double tau_=20; /**< tau_ correspond to the membrance resistance * the Capacity (=R*C) in ms  */
-		const double R_=tau_/C_; /**< R_ = Membrane resistance */  
+		const double R_=tau_/C_; /**< R_ = Membrane resistance in GΩ*/  
 		const double tau_ref_=2; /**< tau_ref_ = tau refractory which lasts 2 ms */
 		const double Erest_=10; /**< Erest_ = energy at rest which is 10mV */
 		const double V_reset_=0; /**< V_reset_ = Membrane potential during the refractory period in mV */
@@ -27,7 +29,9 @@ class Neuron{
 		const double c2_=R_*(1-c1_); /**< c2_ = constant need in the calcul of the membrane potential */
 		const unsigned int D_=15; /**< D_ = delay of transmission(1.5ms) between the neurons that spike and their targets */
 		static constexpr unsigned int Dmax_=16; /**< Dmax_ = Maximal delay of transmission + 1, delay of 16 corresponds to 1.6ms */
-		const double V_ext_=0.02; //V_ext_= 2* V_th/(1000*0.1*20)
+		const unsigned int eta_=2; /** eta=V_ext_/V_th_ */
+		const double Je_=0.1; /**< J_ = amplitude of the postsynaptic current J_ = 0.1mV for the excitatory */
+		const double V_ext_=eta_*V_th_/(Je_*tau_); /**< V_ext_= 2* V_th_/(1000*0.1*20)  */
 		
 		/**
 		*  attributs of the class Neuron
@@ -46,18 +50,16 @@ class Neuron{
 		*  public static attributs of the class Neuron
 		* Do not change from one neurons to another and need to be accessed from outside the class -> no getter because static method should not be constant
 		*/
-		static constexpr unsigned int Ce_=10; /**< Ce_ = Number of excitatory connexion of one neuron -> 1000 */
-		static constexpr unsigned int Ci_=2; /**< Ci_ = Number of excitatory connexion of one neuron -> 250 */
 		static constexpr double h_=0.1; /**< h = step of time in 0.1 ms */
 		
 		
 		/**
 		*  Constructor
         * @param index  the index of the neuron going from 0 to nb_neurons-1(12500-1)
-        * @param J the amplitude of the postsynaptic current 0.1 mV for the excitatory neurons, 0.5 for the inhibitory
+        * @param J the amplitude of the postsynaptic current 0.1 mV for the excitatory neurons, 0.5 for the inhibitory, by default the neuron is excitatory so J=0.1
         * @param V the membrane potential of the neuron in mV, bydefault initialisation of the membrane potential V_ at 0.0 mV
         */
-		Neuron(unsigned int index, double J, double V=0.0); 
+		Neuron(unsigned int index, double J=0.1, double V=0.0); 
 		
 		/** 
 		 * Getters
