@@ -59,10 +59,10 @@ int main(){
 						out << t*Neuron::h_  << '\t' << i << '\n';
 							/*! \brief set in the buffer the incoming spikes, @ see Neuron::incoming_spikes_
 							*/
-							array<unsigned int, Network::Cei_> targets(net.getTargets(i));
-							for(unsigned int j(0); j<targets.size();++j){
-								assert(j<targets.size());
-								all_neurons[targets[j]].receive_spikes(net.getCurrentWeights()[i][j]);
+							
+							for(unsigned int j(0); j<net.getTargets(i).size();++j){
+								assert(j<net.getTargets(i).size());
+								all_neurons[net.getTargets(i)[j]].receive_spikes(all_neurons[i].getWeight());
 							}
 					}
 						
