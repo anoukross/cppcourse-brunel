@@ -2,6 +2,7 @@
 #define NETWORK_HPP
 
 #include "Neuron.hpp"
+#include "Experiment.hpp"
 #include <vector>
 
 /**

@@ -8,7 +8,7 @@ using namespace std;
 
 int main(){
 	Experiment e; /**< creates a network composed 12500 neurons, @see Network  */
-	e.launchSimulation(1000);
+	e.launchSimulation(10000);
 	
 	
 	return 0;

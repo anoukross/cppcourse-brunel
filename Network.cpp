@@ -1,8 +1,7 @@
 #include "Network.hpp"
 #include <random>
 #include <cassert>
-#include <iostream>
-#include <fstream>
+
 
 
 /**
@@ -16,10 +15,11 @@ Network::Network()
 		my_network_.push_back(n);
 	}
 	
+		double excit_weight(Neuron::je_);
 	
 	for(unsigned int i(0); i<nb_excit_; ++i){
 		targets_.push_back(std::vector<unsigned int> (Cei_,0));
-		weights_.push_back(0.1);
+		weights_.push_back(excit_weight);
 		for(unsigned int j(0); j< Network::Ce_; ++j){
 			/**initialization of the amplitude of the postsynaptic current (J=0.1mV) of the excitatory  neurons 
 			 * The excitatory are the first 10000 elements of my_network
@@ -42,7 +42,7 @@ Network::Network()
 	}
 	for(unsigned int i(nb_excit_); i< nb_neurons_; ++i){
 		targets_.push_back(std::vector<unsigned int> (Cei_,0));
-		weights_.push_back(-(0.1*Neuron::g_));
+		weights_.push_back(-(excit_weight*Neuron::g_));
 		for(unsigned int j(Ce_); j< Network::Cei_; ++j){
 			/**initialization of the amplitude of the postsynaptic current (J=0.5mV) of the inhibitory  neurons 
 			* The inhibitory are the last 2500 elements of my_network
@@ -87,22 +87,18 @@ std::vector<unsigned int> Network::getTargets(unsigned int index) const{
 */
 
 void Network::update(unsigned int time){
-	std::ofstream out("spikes.txt", std::ios_base::app);
-	if (out.fail()){
-		std::cerr << "Erreur : impossible d'ouvrir le fichier " << "simulator.dat" << "en écriture." << std::endl;
-	}else{ 
-		for(unsigned int i(0); i<Network::nb_neurons_; ++i){
-			assert(i< nb_neurons_);
-			if(my_network_[i].update(0, time)){ //If the neuron i has spiked
-				assert(my_network_[i].getSpikesNumber()>0);
-				out << time*Neuron::h_  << '\t' << my_network_[i].getIndex() << '\n';
-				/*! \brief set in the buffer the incoming spikes, @ see Neuron::incoming_spikes_
-				*/
-				for(unsigned int j(0); j<targets_[i].size();++j){
-					assert(j<targets_[i].size());
-					assert(i<weights_.size());
-					my_network_[targets_[i][j]].receive_spikes(weights_[i]);
-				}
+	
+	for(unsigned int i(0); i<Network::nb_neurons_; ++i){
+		assert(i< nb_neurons_);
+		if(my_network_[i].update(0, time)){ //If the neuron i has spiked
+			assert(my_network_[i].getSpikesNumber()>0);
+			Experiment::fetchData(time, my_network_[i].getIndex());
+			/*! \brief set in the buffer the incoming spikes, @ see Neuron::incoming_spikes_
+			*/
+			for(unsigned int j(0); j<targets_[i].size();++j){
+				assert(j<targets_[i].size());
+				assert(i<weights_.size());
+				my_network_[targets_[i][j]].receive_spikes(weights_[i]);
 			}
 		}
 	}

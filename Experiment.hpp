@@ -2,6 +2,7 @@
 #define EXPERIMENT_HPP
 
 #include "Network.hpp"
+#include "Neuron.hpp"
 
 
 
@@ -11,6 +12,7 @@
 class Experiment{	
 	public:
 		void launchSimulation(unsigned int steps_number);
+		static void fetchData(unsigned int time_steps, unsigned int indice);
 
 	
 	
