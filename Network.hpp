@@ -42,8 +42,7 @@ class Network{
 		*/
 		std::vector<unsigned int> getTargets(unsigned int index) const;
 		
-		void update_all(unsigned int time);
-		void launchSimulation(unsigned int steps_number);
+		void update(unsigned int time);
 	
 	private:
 	

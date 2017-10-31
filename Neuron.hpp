@@ -50,6 +50,7 @@ class Neuron{
 		static constexpr double h_=0.1; /**< h = step of time in 0.1 ms */
 		static constexpr double je_=0.1; /**< J_ = amplitude of the postsynaptic current J_ = 0.1mV for the excitatory */
 		static constexpr double g_=5;
+	
 		
 		
 		/**

@@ -1,4 +1,4 @@
-#include "Network.hpp"
+#include "Experiment.hpp"
 
 using namespace std;
 
@@ -7,8 +7,8 @@ using namespace std;
 */
 
 int main(){
-	Network net; /**< creates a network composed 12500 neurons, @see Network  */
-	net.launchSimulation(5000);
+	Experiment e; /**< creates a network composed 12500 neurons, @see Network  */
+	e.launchSimulation(1000);
 	
 	
 	return 0;

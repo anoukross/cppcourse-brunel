@@ -86,7 +86,7 @@ std::vector<unsigned int> Network::getTargets(unsigned int index) const{
 * Initialisation of targets and weights
 */
 
-void Network::update_all(unsigned int time){
+void Network::update(unsigned int time){
 	std::ofstream out("spikes.txt", std::ios_base::app);
 	if (out.fail()){
 		std::cerr << "Erreur : impossible d'ouvrir le fichier " << "simulator.dat" << "en écriture." << std::endl;
@@ -108,13 +108,4 @@ void Network::update_all(unsigned int time){
 	}
 }
 
-void Network::launchSimulation(unsigned int steps_number){
-	for(unsigned int t(1); t<steps_number; ++t){
-			/*! \brief There is no update when the time is equal to 0
-			*/
-			update_all(t);
-							
-	} 
-	
-}
 
