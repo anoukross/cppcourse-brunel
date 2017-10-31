@@ -39,9 +39,10 @@ class Network{
 			
 		/**
 		 * Getter
-		 * @return the connexion of a neuron
+		 * @return the connexions of a neuron
 		*/
 		std::vector<unsigned int> getTargets(unsigned int index) const;
+		double getWeight(unsigned int index) const;
 		
 		void update(unsigned int time);
 	

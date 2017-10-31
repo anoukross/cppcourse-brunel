@@ -37,7 +37,7 @@ class Neuron{
 		double V_; /**< V_ = Membrane potential in mV */
 		unsigned int index_; /**< index_ = number attributed to one particular neuron, is between 0 and nb_neurons-1(12500-1)*/
 		unsigned int spikes_number_; /**< spikesNumber_ = number of time a neuron has spiked */
-		std::vector<double> spikes_time_; /** spikesTime_ registers the moment when the spikes of a neuron occured */
+		std::vector<unsigned int> spikes_time_; /** spikesTime_ registers the moment when the spikes of a neuron occured */
 		unsigned int clock_; /**< clock = internal clock of a neuron */
 		std::array<double, Dmax_> incoming_spikes_; /** incoming_spikes_ = buffer of the size Dmax(delay maximal +1) where each step of time is associated with the amplitude of the spikes arriving from the other neurons targeting this one  at that time */
 		
@@ -69,7 +69,9 @@ class Neuron{
 		double getDelay() const; /**< @return D_ the delay of transmission between one neuron and his targets */
 		unsigned int getIndex() const; /**< @return index_ the index of the neuron, between 0 and nb_neurons-1(12500-1)*/
 		unsigned int getSpikesNumber() const; /**< @return spikes_number_  the number of time a neuron has spikes*/
-		std::vector<double> getSpikesTime() const; /**< @return spikes_time_  the time of the spikes that have occurred */
+		std::vector<unsigned int> getSpikesTime() const; /**< @return spikes_time_  the time of the spikes that have occurred */
+		unsigned int getClock() const;
+		std::array<double, Dmax_> getIncomingSpikes() const;
 		
 		/** 
 		 * Setter 

@@ -13,6 +13,7 @@ class Experiment{
 	public:
 		void launchSimulation(unsigned int steps_number);
 		static void fetchData(unsigned int time_steps, unsigned int indice);
+		void cleanData();
 
 	
 	

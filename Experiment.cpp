@@ -24,3 +24,13 @@ void Experiment::fetchData(unsigned int time_steps, unsigned int indice){
 	}
 	
 }
+
+void Experiment::cleanData(){
+	std::ofstream out("spikes.txt");
+	if (out.fail()){
+			std::cerr << "Erreur : impossible d'ouvrir le fichier " << "simulator.dat" << "en écriture." << std::endl;
+		}else{
+			out << "";
+		}
+	
+}

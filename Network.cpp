@@ -82,6 +82,11 @@ std::vector<unsigned int> Network::getTargets(unsigned int index) const{
 	return targets_[index];
 }
 
+double Network::getWeight(unsigned int index) const{
+	assert(index<weights_.size());
+	return weights_[index];
+}
+
 /**
 * Initialisation of targets and weights
 */
@@ -92,7 +97,7 @@ void Network::update(unsigned int time){
 		assert(i< nb_neurons_);
 		if(my_network_[i].update(0, time)){ //If the neuron i has spiked
 			assert(my_network_[i].getSpikesNumber()>0);
-			Experiment::fetchData(time, my_network_[i].getIndex());
+			Experiment::fetchData(time, i);
 			/*! \brief set in the buffer the incoming spikes, @ see Neuron::incoming_spikes_
 			*/
 			for(unsigned int j(0); j<targets_[i].size();++j){

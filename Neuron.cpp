@@ -1,8 +1,6 @@
 #include "Network.hpp"
 #include <cassert>
 #include <random>
-#include <iostream>
-#include <fstream>
 
 /**
 *  Constructor
@@ -45,8 +43,17 @@ unsigned int Neuron::getIndex() const{
 unsigned int Neuron::getSpikesNumber() const{
 	return spikes_number_;
 }
-std::vector<double> Neuron::getSpikesTime() const{
+std::vector<unsigned int> Neuron::getSpikesTime() const{
 	return spikes_time_;
+}
+
+std::array<double, Neuron::Dmax_> Neuron::getIncomingSpikes() const{
+	return incoming_spikes_;
+}
+
+unsigned int Neuron::getClock() const{
+	
+	return clock_;
 }
 
 /**
@@ -105,7 +112,6 @@ bool Neuron::update(double I, unsigned int time){
 		 */
 		if(incoming_spikes_[clock_%Dmax_]>0.0){
 			V_new+=incoming_spikes_[clock_%Dmax_];
-			//std::cout << "Neuron " << index_ << " has received a spike at time " << time*h_ << " ms." <<std::endl;	//cannot spike at t=0
 			
 			/*! \brief Reinitialisation of the value of my buffer corresponding to the compartment [clock%Dmax] that have just been used
 			*/
@@ -123,7 +129,6 @@ bool Neuron::update(double I, unsigned int time){
 			*/
 			V_new=V_reset_; 	
 			hasSpiked=true;	
-			//std::cout << "Neuron " << index_ << " has spiked at time: " << time*h_ << " ms." << std::endl;
 			}
 		
 		/*! \brief Modifies the attribute membrane potential V_
