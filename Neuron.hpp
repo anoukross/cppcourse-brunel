@@ -5,7 +5,6 @@
 #include <array>
 #include <cmath>
 
-class Network;
 
 /**
  *  The Neuron class
@@ -30,8 +29,7 @@ class Neuron{
 		const unsigned int D_=15; /**< D_ = delay of transmission(1.5ms) between the neurons that spike and their targets */
 		static constexpr unsigned int Dmax_=16; /**< Dmax_ = Maximal delay of transmission + 1, delay of 16 corresponds to 1.6ms */
 		const unsigned int eta_=2; /** eta=V_ext_/V_th_ */
-		const double Je_=0.1; /**< J_ = amplitude of the postsynaptic current J_ = 0.1mV for the excitatory */
-		const double V_ext_=eta_*V_th_/(Je_*tau_); /**< V_ext_= 2* V_th_/(1000*0.1*20)  */
+		const double nu_ext_=eta_*V_th_/(je_*tau_); /**< V_ext_= 2* V_th_/(1000*0.1*20)  */
 		
 		/**
 		*  attributs of the class Neuron
@@ -42,7 +40,6 @@ class Neuron{
 		std::vector<double> spikes_time_; /** spikesTime_ registers the moment when the spikes of a neuron occured */
 		unsigned int clock_; /**< clock = internal clock of a neuron */
 		std::array<double, Dmax_> incoming_spikes_; /** incoming_spikes_ = buffer of the size Dmax(delay maximal +1) where each step of time is associated with the amplitude of the spikes arriving from the other neurons targeting this one  at that time */
-		double J_; /**< J_ = amplitude of the postsynaptic current J_ = 0.1mV for the excitatory and 0.5 mV for the inhibitory */
 		
 	public:
 	
@@ -51,6 +48,8 @@ class Neuron{
 		* Do not change from one neurons to another and need to be accessed from outside the class -> no getter because static method should not be constant
 		*/
 		static constexpr double h_=0.1; /**< h = step of time in 0.1 ms */
+		static constexpr double je_=0.1; /**< J_ = amplitude of the postsynaptic current J_ = 0.1mV for the excitatory */
+		static constexpr double g_=5;
 		
 		
 		/**
@@ -59,14 +58,13 @@ class Neuron{
         * @param J the amplitude of the postsynaptic current 0.1 mV for the excitatory neurons, 0.5 for the inhibitory, by default the neuron is excitatory so J=0.1
         * @param V the membrane potential of the neuron in mV, bydefault initialisation of the membrane potential V_ at 0.0 mV
         */
-		Neuron(unsigned int index, double J=0.1, double V=0.0); 
+		Neuron(unsigned int index, double V=0.0); 
 		
 		/** 
 		 * Getters
 		 */
 		double getPotential() const; /**< @return V_ the membrane potential in mV*/
 		double getResistance() const; /**< @return R_  the membrane resistance */
-		double getWeight() const; /**< @return J_ the amplitude of the postsynaptic current */
 		double getDelay() const; /**< @return D_ the delay of transmission between one neuron and his targets */
 		unsigned int getIndex() const; /**< @return index_ the index of the neuron, between 0 and nb_neurons-1(12500-1)*/
 		unsigned int getSpikesNumber() const; /**< @return spikes_number_  the number of time a neuron has spikes*/

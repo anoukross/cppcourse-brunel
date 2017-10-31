@@ -2,10 +2,7 @@
 #define NETWORK_HPP
 
 #include "Neuron.hpp"
-#include "Excitatory.hpp"
-#include "Inhibitory.hpp"
 #include <vector>
-#include <array>
 
 /**
 * Predefinition of the classes Inhibitory and Excitatory
@@ -45,17 +42,19 @@ class Network{
 		*/
 		std::vector<unsigned int> getTargets(unsigned int index) const;
 		
-		void connect(unsigned int from, unsigned int to, unsigned int index);
+		void update_all(unsigned int time);
+		void launchSimulation(unsigned int steps_number);
 	
 	private:
 	
-		std::vector<unsigned int> my_network_; /**< my_network_ corresponds to a tab with the indices of all my neurons 
+		std::vector<Neuron> my_network_; /**< my_network_ corresponds to a tab with the indices of all my neurons 
 		
 		/**
 		 * targets_ is a tab containing the number of time neurons are connected to one another, 
 		 * for example, targets_[from][to]=2, the neuron(to) is a target of neuron(from) with two connexions
 		*/
 		std::vector<std::vector<unsigned int>> targets_; 
+		std::vector<double> weights_;
 	
 };
 

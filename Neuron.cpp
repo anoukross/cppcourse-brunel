@@ -2,12 +2,13 @@
 #include <cassert>
 #include <random>
 #include <iostream>
+#include <fstream>
 
 /**
 *  Constructor
 */
-Neuron::Neuron(unsigned int index, double J, double V)
-: J_(J), V_(V), index_(index), spikes_number_(0), clock_(0)
+Neuron::Neuron(unsigned int index, double V)
+: V_(V), index_(index), spikes_number_(0), clock_(0)
 {
 	/*! \brief At the beggining of the simulation, the neurons have not yet received a postsynaptic current
 	 * ->Every compartment of incoming_spikes_ should equal 0.0
@@ -31,9 +32,6 @@ double Neuron::getResistance() const{
 	return R_;
 }
 
-double Neuron::getWeight() const{
-	return J_;
-}
 
 double Neuron::getDelay() const{
 	return D_;
@@ -95,9 +93,9 @@ bool Neuron::update(double I, unsigned int time){
 		static std::random_device rd;
 		static std::mt19937 gen(rd());
 		
-		/*! \brief The random generator follows a poisson distribution with λ = V_ext_*h_, , static so that it is really random
+		/*! \brief The random generator follows a poisson distribution with λ = nu_ext_*h_, , static so that it is really random
 		 */
-		static std::poisson_distribution<> d(V_ext_*h_);
+		static std::poisson_distribution<> d(nu_ext_*h_);
 		
 		/*! \brief The external current I is equal to 0
 		 */
