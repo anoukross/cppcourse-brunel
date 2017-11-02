@@ -44,7 +44,7 @@ class Network{
 		std::vector<unsigned int> getTargets(unsigned int index) const;
 		double getWeight(unsigned int index) const;
 		
-		void update(unsigned int time);
+		std::vector<unsigned int> update(unsigned int time);
 	
 	private:
 	
