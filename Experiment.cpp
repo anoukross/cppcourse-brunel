@@ -15,7 +15,7 @@ void Experiment::launchSimulation(unsigned int time){
 			*/
 			std::vector<unsigned int> index_of_spikers(net.update(t));
 			for(unsigned int i(0);i<index_of_spikers.size();++i){
-			out << t*Neuron::h_ << '\t' << index_of_spikers[i] << '\n';	
+				out << t << '\t' << index_of_spikers[i] << '\n';	
 			}
 		}
 							

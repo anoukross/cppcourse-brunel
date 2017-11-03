@@ -25,9 +25,9 @@ class Network{
 		static constexpr long unsigned int nb_excit_ = 10000; /**< nb_excit_ corresponds to the number of excitatory neurons in a network */
 		static constexpr long unsigned int nb_inhib_ = 2500; /**< nb_inhib_ corresponds to the number of inhibitory neurons in a network */
 		static constexpr long unsigned int nb_neurons_= nb_inhib_ + nb_excit_; /**< nb_inhib_ corresponds to the number of neurons in a network */
-		static constexpr unsigned int Ce_=0.1*nb_excit_; /**< Ce_ = Number of excitatory connexion of one neuron -> nb_excit_*10%=1000 */
-		static constexpr unsigned int Ci_=0.1*nb_inhib_; /**< Ci_ = Number of excitatory connexion of one neuron -> nb_inhib_*10%=250 */
-		static constexpr unsigned int Cei_=Ce_+Ci_; /**< Cei_ = Number of connexion of one neuron -> Ce_+Ci_=1250 */
+		static constexpr unsigned int nb_connex_excit_=0.1*nb_excit_; /**< Ce_ = Number of excitatory connexion of one neuron -> nb_excit_*10%=1000 */
+		static constexpr unsigned int nb_connex_inhib_=0.1*nb_inhib_; /**< Ci_ = Number of excitatory connexion of one neuron -> nb_inhib_*10%=250 */
+		static constexpr unsigned int nb_connex_=nb_connex_excit_+ nb_connex_inhib_; /**< Cei_ = Number of connexion of one neuron -> Ce_+Ci_=1250 */
 	
 		/**
 		 * Constructor
@@ -45,6 +45,7 @@ class Network{
 		double getWeight(unsigned int index) const;
 		
 		std::vector<unsigned int> update(unsigned int time);
+		void send_spikes(unsigned int to, double weight);
 	
 	private:
 	

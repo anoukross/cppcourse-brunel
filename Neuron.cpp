@@ -5,34 +5,35 @@
 /**
 *  Constructor
 */
-Neuron::Neuron(unsigned int index, double V)
-: V_(V), index_(index), spikes_number_(0), clock_(0)
+Neuron::Neuron(unsigned int index, double v)
+: v_(v), index_(index), spikes_number_(0), clock_(0)
 {
 	/*! \brief At the beggining of the simulation, the neurons have not yet received a postsynaptic current
 	 * ->Every compartment of incoming_spikes_ should equal 0.0
 	 */
-	for(unsigned int i(0);i<Dmax_;++i){
+	for(unsigned int i(0);i<dmax_;++i){
 		incoming_spikes_[i]=0.0;
 	}
 	
 	/*! \brief To be sure that when we create a neuron, it has got not spike time
 	 */
-	spikes_time_.clear(); 
+	spikes_time_.clear();
+	outcoming_connexion_.clear();
 }
 		
 /**
 *  Getters
 */
 double Neuron::getPotential() const{
-	return V_;
+	return v_;
 }
 double Neuron::getResistance() const{
-	return R_;
+	return resistance_;
 }
 
 
 double Neuron::getDelay() const{
-	return D_;
+	return delay_;
 }
 
 
@@ -47,7 +48,7 @@ std::vector<unsigned int> Neuron::getSpikesTime() const{
 	return spikes_time_;
 }
 
-std::array<double, Neuron::Dmax_> Neuron::getIncomingSpikes() const{
+std::array<double, Neuron::dmax_> Neuron::getIncomingSpikes() const{
 	return incoming_spikes_;
 }
 
@@ -56,20 +57,28 @@ unsigned int Neuron::getClock() const{
 	return clock_;
 }
 
+std::vector<unsigned int> Neuron::getOutcomingConnexion() const{
+	return outcoming_connexion_;
+}
+
 /**
 *  Setter
 */
-void Neuron::setPotential(double V){
-	V_=V;
+void Neuron::setPotential(double v){
+	v_=v;
+}
+
+void Neuron::setOutcomingConnexion(unsigned int index){
+	outcoming_connexion_.push_back(index);
 }
 
 //Receive spikes
-void Neuron::receive_spikes(double J){
-	unsigned int t_spike = (D_+clock_)%Dmax_;
+void Neuron::receive_spikes(double weight){
+	unsigned int t_spike = (delay_+clock_)%dmax_;
 	assert(t_spike < incoming_spikes_.size());
 	/*! \brief the amplitude of the postsynaptic current is added in the buffer's compartment corresponding to (D_+clock_)%Dmax_ 
 	*/
-	incoming_spikes_[t_spike]+=J; 
+	incoming_spikes_[t_spike]+=weight; 
 }
 
 //bool
@@ -106,12 +115,12 @@ bool Neuron::update(double I, unsigned int time){
 		
 		/*! \brief The external current I is equal to 0
 		 */
-		double V_new(c1_*V_+I*c2_+d(gen)); 
+		double v_new(c1_*v_+I*c2_+d(gen)); 
 		
 		/*! \brief If a spike is associated with the current time, we add it to the new potential
 		 */
 	
-			V_new+=incoming_spikes_[clock_%Dmax_];
+			v_new+=incoming_spikes_[clock_%dmax_];
 			
 			/*! \brief Reinitialisation of the value of my buffer corresponding to the compartment [clock%Dmax] that have just been used
 			*/
@@ -119,25 +128,26 @@ bool Neuron::update(double I, unsigned int time){
 		
 		/*! \brief A spike occurres if the membrane potential is greater than the membrane potential threshold
 		*/
-		if(V_new > V_th_){
+		if(v_new > v_th_){
 			spikes_time_.push_back(clock_); 
 			spikes_number_+=1;
 			
 			/*! \brief After  a spike, the potential gets back to its reset value
-			*/
-			V_new=V_reset_; 	
+			*/ 	
 			hasSpiked=true;	
 			}
 		
 		/*! \brief Modifies the attribute membrane potential V_
 			*/
-		V_=V_new;
+		v_=v_new;
+	}else{
+		v_=v_reset_;
 	}
 	
 	/*! \brief The local clock of my neuron is incremented at the end of the update
 	*/
 	++clock_; 
-	incoming_spikes_[clock_%Dmax_]=0.0; 
+	incoming_spikes_[clock_%dmax_]=0.0; 
 	
 		
 	return hasSpiked;

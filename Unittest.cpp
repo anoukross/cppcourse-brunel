@@ -8,7 +8,7 @@
 
 TEST (NetworkTest, TargetsNumber){
 	Network n;
-	unsigned int nb_connexions(Network::Cei_);
+	unsigned int nb_connexions(Network::nb_connex_);
 	for(unsigned int t(0); t<Network::nb_neurons_;  ++t){ 
 		
 		EXPECT_EQ(n.getTargets(t).size(), nb_connexions);
