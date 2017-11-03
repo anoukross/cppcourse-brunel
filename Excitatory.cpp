@@ -1,17 +1,14 @@
-/*
-#ifndef EXCITATORY_HPP
-#define EXCITATORY_HPP
+/*#include "Excitatory.hpp"
+#include <cassert>
 
-#include "Neuron.hpp"
-#include "Network.hpp"
-class Excitatory: public Neuron{	
-	public:
 
-		Excitatory(unsigned int index);
 
-	
-	
-};
+Excitatory::Excitatory(unsigned int index)
 
-#endif
+:Neuron(index, 0.1)
+{
+
+assert(index < Network::nb_excit_);  
+assert(index>= 0);
+}
 */
