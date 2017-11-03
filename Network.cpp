@@ -97,11 +97,11 @@ std::vector<unsigned int> Network::update(unsigned int time){
 		assert(i< nb_neurons_);
 		if(my_network_[i].update(0, time)){ //If the neuron i has spiked
 			assert(my_network_[i].getSpikesNumber()>0);
-			if(time%10==0){
+			//if(time%10==0){
 				index_of_spikers.push_back(i);
 				/*! \brief set in the buffer the incoming spikes, @ see Neuron::incoming_spikes_
 				*/
-			}
+			//}
 			for(unsigned int j(0); j<targets_[i].size();++j){
 				assert(j<targets_[i].size());
 				assert(i<weights_.size());

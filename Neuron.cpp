@@ -110,13 +110,11 @@ bool Neuron::update(double I, unsigned int time){
 		
 		/*! \brief If a spike is associated with the current time, we add it to the new potential
 		 */
-		if(incoming_spikes_[clock_%Dmax_]>0.0){
+	
 			V_new+=incoming_spikes_[clock_%Dmax_];
 			
 			/*! \brief Reinitialisation of the value of my buffer corresponding to the compartment [clock%Dmax] that have just been used
 			*/
-			incoming_spikes_[clock_%Dmax_]=0.0; 
-		}
 		
 		
 		/*! \brief A spike occurres if the membrane potential is greater than the membrane potential threshold
@@ -139,6 +137,7 @@ bool Neuron::update(double I, unsigned int time){
 	/*! \brief The local clock of my neuron is incremented at the end of the update
 	*/
 	++clock_; 
+	incoming_spikes_[clock_%Dmax_]=0.0; 
 	
 		
 	return hasSpiked;
