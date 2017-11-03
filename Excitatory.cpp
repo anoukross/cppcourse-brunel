@@ -1,11 +1,20 @@
-/*#include "Excitatory.hpp"
-#include <cassert>
+#ifndef EXPERIMENT_HPP
+#define EXPERIMENT_HPP
 
-Excitatory::Excitatory(unsigned int index)
-:Neuron(index, 0.1)
-{
+#include "Network.hpp"
+#include "Neuron.hpp"
 
-assert(index < Network::nb_excit_);  
-assert(index>= 0);
-}
-/*
+
+
+/**
+ *  The Experiment class
+ */
+class Experiment{	
+	public:
+		void launchSimulation(unsigned int t);
+
+	
+	
+};
+
+#endif
