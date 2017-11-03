@@ -1,20 +1,17 @@
-#ifndef EXPERIMENT_HPP
-#define EXPERIMENT_HPP
+/*
+#ifndef EXCITATORY_HPP
+#define EXCITATORY_HPP
 
-#include "Network.hpp"
 #include "Neuron.hpp"
-
-
-
-/**
- *  The Experiment class
- */
-class Experiment{	
+#include "Network.hpp"
+class Excitatory: public Neuron{	
 	public:
-		void launchSimulation(unsigned int t);
+
+		Excitatory(unsigned int index);
 
 	
 	
 };
 
 #endif
+*/
