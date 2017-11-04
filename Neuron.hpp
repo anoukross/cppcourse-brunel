@@ -29,7 +29,7 @@ class Neuron{
 		const double c2_=resistance_*(1-c1_); /**< c2_ = constant needed in the calculations of the membrane potential */
 		const unsigned int delay_=15; /**< delay of transmission(1.5ms) between the neurons that spikes and their targets */
 		static constexpr unsigned int dmax_=16; /**< dmax_ = Maximal delay of transmission + 1, delay of 16 corresponds to 1.6ms */
-		const unsigned int eta_=2; /** eta=v_ext_/v_th_ */
+		const double eta_=2; /** eta=v_ext_/v_th_ */
 		const double nu_ext_=eta_*v_th_/(je_*tau_); /**< nu_ext_ is used to create the background noise of the cortex */
 
 
@@ -51,7 +51,7 @@ class Neuron{
 		 * no getter because cannot have a static method that is const
 		 */
 		static constexpr double je_=0.1; /**< je_ = amplitude of the excitatory postsynaptic weight je_ = 0.1mV */
-		static constexpr double g_=3; /**< g_ = g_=|ji_|/|je_| -> ji_ is g_(5) times stronger than je_, where ji_ is the amplitude of the inhibitory postsynaptic weight */
+		static constexpr double g_=5; /**< g_ = g_=|ji_|/|je_| -> ji_ is g_(5) times stronger than je_, where ji_ is the amplitude of the inhibitory postsynaptic weight */
 
 		/**
 		*  Constructor
@@ -67,11 +67,11 @@ class Neuron{
 		unsigned int getIndex() const; /**< @return index_ the index of the neuron, between 0 and nb_neurons-1(12499)*/
 		std::vector<unsigned int> getSpikesTime() const; /**< @return spikes_time_  the time of the spikes that have occurred */
 		unsigned int getSpikesNumber() const; /**< @return spikes_number_  the number of time a neuron has spiked*/
-		std::array<double, dmax_> getIncomingSpikes() const; /**< @return  the buffer containing the incoming spikes, @see incoming_spikes_ */
-		std::vector<unsigned int> getOutcomingConnexions() const; /**< @return  the outcoming connexion of a neuron */
+		std::array<double, dmax_> getIncomingSpikes() const; /**< @return  incoming_spikes_ the buffer containing the incoming spikes, @see incoming_spikes_ */
+		std::vector<unsigned int> getOutcomingConnexions() const; /**< @return  outcoming_connexions_ the outcoming connexion of a neuron */
 		double getResistance() const; /**< @return resistance_  the membrane resistance */
 		double getDelay() const; /**< @return delay_ the delay of transmission of the PPS weight between one neuron and his targets */
-		unsigned int getClock() const; /**< @return  clock the internal clock of the neuron */
+		unsigned int getClock() const; /**< @return  clock_ the internal clock of the neuron */
 
 		/**
 		 * Setters
