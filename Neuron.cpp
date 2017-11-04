@@ -1,4 +1,4 @@
-#include "Network.hpp"
+#include "Neuron.hpp"
 #include <cassert>
 #include <random>
 
@@ -20,7 +20,7 @@ Neuron::Neuron(unsigned int index, double v)
 	 * To be sure that when a neuron is created, it has got not spike time and not outcoming connexion
 	 */
 	spikes_time_.clear();
-	outcoming_connexion_.clear();
+	outcoming_connexions_.clear();
 }
 		
 /**
@@ -31,6 +31,7 @@ double Neuron::getPotential() const{
 }
 
 unsigned int Neuron::getIndex() const{
+	assert(index_<12500);
 	return index_;
 }
 
@@ -46,8 +47,8 @@ std::array<double, Neuron::dmax_> Neuron::getIncomingSpikes() const{
 	return incoming_spikes_;
 }
 
-std::vector<unsigned int> Neuron::getOutcomingConnexion() const{
-	return outcoming_connexion_;
+std::vector<unsigned int> Neuron::getOutcomingConnexions() const{
+	return outcoming_connexions_;
 }
 
 double Neuron::getResistance() const{
@@ -63,17 +64,6 @@ unsigned int Neuron::getClock() const{
 	return clock_;
 }
 
-/**
-*  Static Getters
-*/
-
-double Neuron::getWeight(){
-	return je_;
-}
-
-double Neuron::get_g(){
-	return g_;
-}
 
 /**
 *  Setters
@@ -82,8 +72,8 @@ void Neuron::setPotential(double v){
 	v_=v;
 }
 
-void Neuron::setOutcomingConnexion(unsigned int index){
-	outcoming_connexion_.push_back(index);
+void Neuron::setOutcomingConnexions(unsigned int index){
+	outcoming_connexions_.push_back(index);
 }
 
 /**
@@ -126,6 +116,7 @@ bool Neuron::update(double I, unsigned int time){
 	 * If neuron is refractory -> neuron has spiked -> v will be put to its reset value-> insensitive to stimulation
 	 */
 	if(isRefractory()){ 
+		assert(spikes_number_>0);
 		v_=v_reset_;
 	}else{
 		/** \brief Creation of a random device, static so that it is really random

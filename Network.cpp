@@ -1,102 +1,134 @@
 #include "Network.hpp"
 #include <random>
 #include <cassert>
-
-
+#include <iostream>
 
 /**
  * Constructor
 */
 Network::Network()
 {
+	/**
+	 * Creation of the neurons of my network
+	 */
 	for(long unsigned int i(0); i<nb_neurons_; ++i){
 		Neuron n(i);
 		my_network_.push_back(n);
 	}
-	double excit_weight(Neuron::getWeight());
+	double excit_weight(Neuron::je_);
+	/** 
+	 * creation of two random uniform_int distribution
+	 * The first one going from 0 to nb_excit_-1 -> corresponds to the excitatory connexion
+	 * The second to nb_excit_ to nb_neurons_-1 -> corresponds to the inhibitory connexion
+	 */
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
 	static std::uniform_int_distribution<> dis_e(0, nb_excit_-1);
 	static std::uniform_int_distribution<> dis_i(nb_excit_, nb_neurons_-1);
 	for (long unsigned int i(0); i <nb_neurons_; ++i){
+		
+	/** \brief add in target a vector of size nb_connex_ with 0 in every box
+	 */
 		targets_.push_back(std::vector<unsigned int> (nb_connex_,0));
 		if(i<nb_excit_){
+			/**initialization of the amplitude of the postsynaptic current (je_=0.1mV) of the excitatory  neurons 
+			 * The excitatory are the first 10000 elements of my_network_
+			 */
 			weights_.push_back(excit_weight);
 			for(unsigned int j(0); j< nb_connex_excit_; ++j){
-			/**initialization of the amplitude of the postsynaptic current (J=0.1mV) of the excitatory  neurons 
-			 * The excitatory are the first 10000 elements of my_network
-			 * Creates the excitatory connexion of the neuron i
-			/*! \brief Creates randomly the connexion that neuron with index i receives from excitatory neurons (Ce_=1000)
-			*/
 				assert(i<nb_excit_);
-				assert(j<nb_connex_excit_);
+				assert(j<targets_[i].size());
+				/**
+				 * Creates randomly the connexion that neuron with index i receives from excitatory neurons
+				 * targets_[i][j] means that neuron i is a target of neuron j
+				*/
 				targets_[i][j]=dis_e(gen);
-				my_network_[j].setOutcomingConnexion(i);
+				
+				/**
+				 * add the index i to the outcoming_connexions_ tab of neuron j
+				 */
+				my_network_[j].setOutcomingConnexions(i);
 			}
 		}else{
-			weights_.push_back(-(excit_weight*Neuron::get_g()));
+			/**initialization of the amplitude of the postsynaptic current (ji_=g_*je_ =-0.5mV) of the inhibitory  neurons 
+			 * The inhibitory  are the last 2500 elements of my_network_
+			 */
+			weights_.push_back(-(excit_weight*Neuron::g_));
 			for(unsigned int j(nb_connex_excit_); j<nb_connex_; ++j){
-			/**initialization of the amplitude of the postsynaptic current (J=0.5mV) of the inhibitory  neurons 
-			* The inhibitory are the last 2500 elements of my_network
-			* creates the inhibitory connexion of neuron i
-			*/
-				assert(i<nb_neurons_);
-				assert(i>=nb_excit_);
+				assert(i<targets_.size());
+				assert(i>=nb_excit_); 
 				assert(j>=nb_connex_excit_);
-				assert(j<nb_connex_);
+				assert(j<targets_[i].size());
+				/**
+				 * Creates randomly the connexion that neuron with index i receives from inhibitory neurons
+				 * targets_[i][j] means that neuron i is a target of neuron j
+				*/
 				targets_[i][j]=dis_i(gen);
-				my_network_[j].setOutcomingConnexion(i);
+				
+				/**
+				 * add the index i to the outcoming_connexions_ tab of neuron j
+				 */
+				my_network_[j].setOutcomingConnexions(i);
 	
 			}
 		}
 	}
+	assert(targets_.size()==nb_neurons_);
+	assert(targets_[0].size()==nb_connex_);
+	assert(my_network_.size()==nb_neurons_);
+	assert(weights_.size()==nb_neurons_);
 	
 }
 
 /**
 * Getters
 */
-
-
 std::vector<unsigned int> Network::getTargets(unsigned int index) const{
-	/*! \brief Check connexion of a neuron
+	/** \brief returns the indices of the neurons that target the neuron with index index
 	*/
 	assert(index<targets_.size());
 	return targets_[index];
 }
 
 double Network::getWeight(unsigned int index) const{
+	/** \brief returns the weights that neuron with index index sends to its targets
+	*/
 	assert(index<weights_.size());
 	return weights_[index];
 }
 
 /**
-* Initialisation of targets and weights
+* Update of the network
 */
 
 std::vector<unsigned int> Network::update(unsigned int time){
-	std::vector<unsigned int> index_of_spikers;
+	std::vector<unsigned int> index_of_spikers; /**< contains the index of the neurons that spikes at this time, if this time is a multiple of 10-> if h_ is an integer in ms*/
 	for(unsigned int i(0); i<Network::nb_neurons_; ++i){
 		assert(i< nb_neurons_);
-		if(my_network_[i].update(0, time)){ //If the neuron i has spiked
+		if(my_network_[i].update(0, time)){ /**< check whether neuron i has spiked*/
 			assert(my_network_[i].getSpikesNumber()>0);
-			if(time%10==0){
+			if(time%10==0){ /**< sampling of the values every 10 seconds*/
 				index_of_spikers.push_back(i);
-				/*! \brief set in the buffer the incoming spikes, @ see Neuron::incoming_spikes_
-				*/
 			}
-			std::vector<unsigned int> outcoming_connex(my_network_[i].getOutcomingConnexion());
+			std::vector<unsigned int> outcoming_connex(my_network_[i].getOutcomingConnexions()); /**< tab containing all the target of neuron i */
 			for(unsigned int j(0); j<outcoming_connex.size();++j){
 				assert(j<outcoming_connex.size());
 				assert(i<weights_.size());
-				sendSpikes(outcoming_connex[j],weights_[i]);
+				sendSpikes(outcoming_connex[j],weights_[i]); /**< call sendSpikes so that neuron j(target of neuron i) can receive the pps weight from neuron i */
 			}
 		}
 	}
 	return index_of_spikers;
 }
+/**
+ * SendSpikes
+ */
 
 void Network::sendSpikes(unsigned int to, double weight){
+	/**
+	 * call receiveSpikes to the neuron to that receives pps weight from the neuron from
+	 * @see Neuron::receiveSpikes(double weight)
+	 */
 	my_network_[to].receiveSpikes(weight);
 }
 
