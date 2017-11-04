@@ -64,28 +64,37 @@ class Neuron{
 		/** 
 		 * Getters
 		 */
-		double getPotential() const; /**< @return V_ the membrane potential in mV*/
-		double getResistance() const; /**< @return R_  the membrane resistance */
-		double getDelay() const; /**< @return D_ the delay of transmission between one neuron and his targets */
-		unsigned int getIndex() const; /**< @return index_ the index of the neuron, between 0 and nb_neurons-1(12500-1)*/
-		unsigned int getSpikesNumber() const; /**< @return spikes_number_  the number of time a neuron has spikes*/
+		double getPotential() const; /**< @return v_ the membrane potential in mV*/
+		double getResistance() const; /**< @return resistance_  the membrane resistance */
+		double getDelay() const; /**< @return delay_ the delay of transmission of the PPS weight between one neuron and his targets */
+		unsigned int getIndex() const; /**< @return index_ the index of the neuron, between 0 and nb_neurons-1(12499)*/
+		unsigned int getSpikesNumber() const; /**< @return spikes_number_  the number of time a neuron has spiked*/
 		std::vector<unsigned int> getSpikesTime() const; /**< @return spikes_time_  the time of the spikes that have occurred */
-		unsigned int getClock() const;
-		std::array<double, dmax_> getIncomingSpikes() const;
-		std::vector<unsigned int> getOutcomingConnexion() const;
+		unsigned int getClock() const; /**< @return  clock the internal clock of the neuron */
+		std::array<double, dmax_> getIncomingSpikes() const; /**< @return  the buffer containing the incoming spikes, @see incoming_spikes_ */
+		std::vector<unsigned int> getOutcomingConnexion() const; /**< @return  the coutcoming connexion of a neuron */
 		
 		/** 
 		 * Setter 
 		 */
-		void setPotential(double v); /**<  set the membrane potential V_ to a given value V */
-		void setOutcomingConnexion(unsigned int index);
+		void setPotential(double v); /**< @param v membrane potential value that will replace the actual v_  */
+		
+		/** @param index index of a neuron that recieve the connexion from this neuron
+		 *this method will push_back the attribute outcoming_spikes_ with the value of the index 
+		 * when the connexions are created in the constructor of Network 
+		 * @see outcoming_spikes_ 
+		 * @see Network::Network()
+		 */
+		void setOutcomingConnexion(unsigned int index); 
+		
 		/** 
-		 * The method receive_spikes is used whenever a neuron that has targets spikes, 
-		 * it adds in the compartment corresponding to (delay_+clock_)%Dmax_ of the buffer incoming_spikes_  the value of J
-		 * @param J the amplitude of the postsynaptic current
+		 * The method receiveSpikes is used whenever a neuron that has targets spikes, 
+		 * it adds in the compartment of the targeted neuron corresponding to (delay_+clock_)%dmax_ of the buffer incoming_spikes_  the value weight
+		 * @see incoming_spikes_
+		 * @param weight the amplitude of the postsynaptic current
 		 * 0.1mV for the excitatory and 0.5 mV for the inhibitory
 		 */
-		void receive_spikes(double weight); 
+		void receiveSpikes(double weight); 
 		
 		/** 
 		 * @return true if the neuron is in a refractory period
@@ -95,11 +104,12 @@ class Neuron{
 		/** 
 		 * update the neuron state from time t to time t+T, where T is n*h (h pas de temps)
 		 * This method recalculates the mebrane potential at each step of time, except if the neuron is in his refractory period
-		 * The membrane potential is calculated by (c1_*V_+I*c2_+d(gen)) where d(gen) is a random value following a poisson distibution of (V_ext_*J_*h_ *Ce_)
-		 * It then adds, the postsynaptic current if there is one associated with the step of time @see receive_spikes(double J)
+		 * The membrane potential is calculated by (c1_*v_+I*c2_+d(gen)) where d(gen) is a random value following a poisson distibution of (nu_ext_*h_)
+		 * It then adds, the postsynaptic current if there is one associated with the step of time @see receiveSpikes(double weight)
 		 * It verifies whether a neuron has spiked -> if it has, spikes_number_ is incremented and spikes_time_ record the current time
+		 * The buffer incoming_spikes_ is reset to 0 if a neuron has spiked or if it is in its refractory period
 		 * The personnal time of the neuron is finally incremented 	
-		 * @param I corresponds to the external current
+		 * @param I corresponds to the external current, always 0 in this simulation
 		 * @param time corresponds to the simulation time
 		 * @return true if the neuron has spiked
 		 */

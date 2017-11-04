@@ -45,7 +45,7 @@ class Network{
 		double getWeight(unsigned int index) const;
 		
 		std::vector<unsigned int> update(unsigned int time);
-		void send_spikes(unsigned int to, double weight);
+		void sendSpikes(unsigned int to, double weight);
 	
 	private:
 	

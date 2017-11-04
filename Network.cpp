@@ -89,15 +89,15 @@ std::vector<unsigned int> Network::update(unsigned int time){
 			for(unsigned int j(0); j<outcoming_connex.size();++j){
 				assert(j<outcoming_connex.size());
 				assert(i<weights_.size());
-				send_spikes(outcoming_connex[j],weights_[i]);
+				sendSpikes(outcoming_connex[j],weights_[i]);
 			}
 		}
 	}
 	return index_of_spikers;
 }
 
-void Network::send_spikes(unsigned int to, double weight){
-	my_network_[to].receive_spikes(weight);
+void Network::sendSpikes(unsigned int to, double weight){
+	my_network_[to].receiveSpikes(weight);
 }
 
 

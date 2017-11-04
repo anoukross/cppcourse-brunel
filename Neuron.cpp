@@ -73,7 +73,7 @@ void Neuron::setOutcomingConnexion(unsigned int index){
 }
 
 //Receive spikes
-void Neuron::receive_spikes(double weight){
+void Neuron::receiveSpikes(double weight){
 	unsigned int t_spike = (delay_+clock_)%dmax_;
 	assert(t_spike < incoming_spikes_.size());
 	/*! \brief the amplitude of the postsynaptic current is added in the buffer's compartment corresponding to (D_+clock_)%Dmax_ 

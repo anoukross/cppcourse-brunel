@@ -64,7 +64,7 @@ TEST (NeuronTest, Recieve){
 	EXPECT_EQ(n2.getIncomingSpikes()[0],0);
 	n1.setPotential(21);
 	double weight(Neuron::je_);
-	n2.receive_spikes(weight);
+	n2.receiveSpikes(weight);
 	EXPECT_EQ(n2.getIncomingSpikes()[15],weight); //15 derniere case du buffer car t=1 15%1=15
 	
 }
