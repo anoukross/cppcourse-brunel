@@ -11,6 +11,10 @@
  */
 class Experiment{	
 	public:
+	/**
+	 * launchSimulation launches the simulation
+	 * @param t is the number of ms that the simualtion lasts
+	 */
 		void launchSimulation(unsigned int t);
 
 	

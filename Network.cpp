@@ -1,7 +1,6 @@
 #include "Network.hpp"
 #include <random>
 #include <cassert>
-#include <iostream>
 
 /**
  * Constructor
@@ -129,6 +128,7 @@ void Network::sendSpikes(unsigned int to, double weight){
 	 * call receiveSpikes to the neuron to that receives pps weight from the neuron from
 	 * @see Neuron::receiveSpikes(double weight)
 	 */
+	 assert(to<nb_neurons_);
 	my_network_[to].receiveSpikes(weight);
 }
 
