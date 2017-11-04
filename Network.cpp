@@ -13,7 +13,7 @@ Network::Network()
 		Neuron n(i);
 		my_network_.push_back(n);
 	}
-	double excit_weight(Neuron::je_);
+	double excit_weight(Neuron::getWeight());
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
 	static std::uniform_int_distribution<> dis_e(0, nb_excit_-1);
@@ -34,7 +34,7 @@ Network::Network()
 				my_network_[j].setOutcomingConnexion(i);
 			}
 		}else{
-			weights_.push_back(-(excit_weight*Neuron::g_));
+			weights_.push_back(-(excit_weight*Neuron::get_g()));
 			for(unsigned int j(nb_connex_excit_); j<nb_connex_; ++j){
 			/**initialization of the amplitude of the postsynaptic current (J=0.5mV) of the inhibitory  neurons 
 			* The inhibitory are the last 2500 elements of my_network

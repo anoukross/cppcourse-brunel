@@ -17,12 +17,12 @@ TEST (NetworkTest, TargetsNumber){
 
 TEST (NetworkTest, weights){
 	Network n;
-	double weight(Neuron::je_);
+	double weight(Neuron::getWeight());
 	for(unsigned int t(0); t<Network::nb_excit_;  ++t){ 
 		EXPECT_EQ(n.getWeight(t),weight);
 	}
 	for(unsigned int t(Network::nb_excit_); t<Network::nb_neurons_;  ++t){ 
-		EXPECT_EQ(n.getWeight(t),(-weight*Neuron::g_));
+		EXPECT_EQ(n.getWeight(t),(-weight*Neuron::get_g()));
 	}		
 	
 }
@@ -63,7 +63,7 @@ TEST (NeuronTest, Recieve){
 	Neuron n2(2);
 	EXPECT_EQ(n2.getIncomingSpikes()[0],0);
 	n1.setPotential(21);
-	double weight(Neuron::je_);
+	double weight(Neuron::getWeight());
 	n2.receiveSpikes(weight);
 	EXPECT_EQ(n2.getIncomingSpikes()[15],weight); //15 derniere case du buffer car t=1 15%1=15
 	

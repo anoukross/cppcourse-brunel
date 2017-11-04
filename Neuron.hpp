@@ -23,6 +23,7 @@ class Neuron{
 		const double erest_=10; /**< erest_ = energy at rest which is 10mV */
 		const double v_reset_=0; /**< v_reset_ = Membrane potential during the refractory period in mV */
 		const double v_th_=20; /**<  v_th_ = Potential threshold; if a Neuron's potential is above -> there is a spike */
+		const double h_=0.1; /**< h = step of time in 0.1 ms */
 		const int step_=h_*10; /**< step_ -> one step of time corresponds to 0.1 ms, replace h, resolves the problem of floating point */
 		const double c1_=exp(-(h_/tau_)); /** < c1_  = constant needed in the calcul of the membrane potential */
 		const double c2_=resistance_*(1-c1_); /**< c2_ = constant needed in the calcul of the membrane potential */
@@ -30,7 +31,14 @@ class Neuron{
 		static constexpr unsigned int dmax_=16; /**< dmax_ = Maximal delay of transmission + 1, delay of 16 corresponds to 1.6ms */
 		const unsigned int eta_=2; /** eta=v_ext_/v_th_ */
 		const double nu_ext_=eta_*v_th_/(je_*tau_); /**< nu_ext_ is used to create the background noise of the cortex */
-		const double h_=0.1; /**< h = step of time in 0.1 ms */
+		
+		/**
+		 * * Static constant because need to be accessed from outside (in Network), but not specific to a single neuron
+		 * @see getWeight()
+		 * @see get_g()
+		 */
+		static constexpr double je_=0.1; /**< je_ = amplitude of the excitatory postsynaptic weight je_ = 0.1mV */
+		static constexpr double g_=5; /**< g_ = g_=ji_/je_ -> ji_ is g_(5) times stronger than je_, where ji_ is the amplitude of the inhibitory postsynapic weight */
 		
 		/**
 		*  attributs of the class Neuron
@@ -39,20 +47,11 @@ class Neuron{
 		unsigned int index_; /**< index_ = number attributed to one particular neuron, is between 0 and [nb_neurons-1] (12499)*/
 		unsigned int spikes_number_; /**< spikes_number_ = number of time a neuron has spiked */
 		std::vector<unsigned int> spikes_time_; /** spikes_time_ registers the time associated with a particular spike ->spikes_time_[i] is the time at which the ith spike occured */
-		unsigned int clock_; /**< clock_ = internal clock of a neuron */
 		std::array<double, dmax_> incoming_spikes_; /** incoming_spikes_ = buffer of the size dmax_(delay maximal +1) where each step of time is associated with the amplitude of the postsynaptic weights arriving from the neurons targeting this one that have spiked */
 		std::vector<unsigned int> outcoming_connexion_; /**< outcoming_connexion_ is a tab listing all the indices of the neurons that are a target of this one   */
+		unsigned int clock_; /**< clock_ = internal clock of a neuron */
 		
 	public:
-	
-		/**
-		*  public static attributs of the class Neuron
-		* Do not change from one neurons to another and need to be accessed from outside the class -> no getter because static method should not be constant
-		*/
-		static constexpr double je_=0.1; /**< je_ = amplitude of the excitatory postsynaptic weight je_ = 0.1mV */
-		static constexpr double g_=5; /**< g_ = g_=ji_/je_ -> ji_ is g_(5) times stronger than je_, where ji_ is the amplitude of the inhibitory postsynapic weight */
-	
-		
 		
 		/**
 		*  Constructor
@@ -65,17 +64,25 @@ class Neuron{
 		 * Getters
 		 */
 		double getPotential() const; /**< @return v_ the membrane potential in mV*/
-		double getResistance() const; /**< @return resistance_  the membrane resistance */
-		double getDelay() const; /**< @return delay_ the delay of transmission of the PPS weight between one neuron and his targets */
 		unsigned int getIndex() const; /**< @return index_ the index of the neuron, between 0 and nb_neurons-1(12499)*/
-		unsigned int getSpikesNumber() const; /**< @return spikes_number_  the number of time a neuron has spiked*/
 		std::vector<unsigned int> getSpikesTime() const; /**< @return spikes_time_  the time of the spikes that have occurred */
-		unsigned int getClock() const; /**< @return  clock the internal clock of the neuron */
+		unsigned int getSpikesNumber() const; /**< @return spikes_number_  the number of time a neuron has spiked*/
 		std::array<double, dmax_> getIncomingSpikes() const; /**< @return  the buffer containing the incoming spikes, @see incoming_spikes_ */
 		std::vector<unsigned int> getOutcomingConnexion() const; /**< @return  the coutcoming connexion of a neuron */
+		double getResistance() const; /**< @return resistance_  the membrane resistance */
+		double getDelay() const; /**< @return delay_ the delay of transmission of the PPS weight between one neuron and his targets */
+		unsigned int getClock() const; /**< @return  clock the internal clock of the neuron */
+
+		
+		/**
+		 * Static getters because common to all Neuron, can call Neuron::method
+		 * not const because static method cannot be const
+		 */
+		static double getWeight(); /**< @return je_ the pps weight of excitatory neuron*/
+		static double get_g();  /**< @return g_ the ration ji_/je_ @see g_*/
 		
 		/** 
-		 * Setter 
+		 * Setters 
 		 */
 		void setPotential(double v); /**< @param v membrane potential value that will replace the actual v_  */
 		
