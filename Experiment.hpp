@@ -9,16 +9,16 @@
 /**
  *  The Experiment class
  */
-class Experiment{	
+class Experiment{
 	public:
 	/**
 	 * launchSimulation launches the simulation
-	 * @param t is the number of ms that the simualtion lasts
+	 * @param t is the number of ms that the simulation lasts
 	 */
 		void launchSimulation(unsigned int t);
 
-	
-	
+
+
 };
 
 #endif

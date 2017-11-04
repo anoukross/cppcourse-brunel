@@ -10,8 +10,7 @@ TEST (NetworkTest, TargetsNumber){
 	Network n;
 	unsigned int nb_connexions(Network::nb_connex_);
 	for(unsigned int t(0); t<Network::nb_neurons_;  ++t){ 
-		
-		EXPECT_EQ(n.getTargets(t).size(), nb_connexions);
+		EXPECT_EQ(n.getConnexions(t).size(), nb_connexions);
 	}
 }
 
@@ -27,8 +26,16 @@ TEST (NetworkTest, weights){
 	
 }
 
+TEST (NetworkTest, sendSpikes){
+	Network n;
+	double weight(Neuron::je_);
+	n.sendSpikes(1,weight);
+	EXPECT_EQ(n.getNeuron(1).getIncomingSpikes()[15],weight);
+	
+}
+
 TEST (NeuronTest, ConstructorGetters){
-	Neuron n1(1, 5.5); //Initialisation d'un neurone d'indice 1 et de membrane potential 5.5
+	Neuron n1(1, 5.5); //Initialisation of neuron of index 1 and membrane potential 5.5
 	EXPECT_EQ(n1.getPotential(), 5.5);
 	EXPECT_EQ(n1.getIndex(), 1);
 	EXPECT_EQ(n1.getSpikesNumber(), 0);
@@ -48,14 +55,15 @@ TEST (NeuronTest, ConstructorGetters){
 }
 
 TEST (NeuronTest, Spike){
-	Neuron n1(1); //Initialisation du potentiel de membrane à 0
+	Neuron n1(1); //Initialisation of neuron of index 1 and membrane potential by default is 0.0
 	EXPECT_EQ(n1.isRefractory(),false);
 	n1.setPotential(25.4);
 	EXPECT_EQ(n1.getPotential(), 25.4);
 	EXPECT_EQ(n1.update(0,1),true);
-	EXPECT_EQ(n1.getPotential(),0.0);
 	EXPECT_EQ(n1.getSpikesNumber(),1);
 	EXPECT_EQ(n1.isRefractory(),true);	
+	n1.update(0,2);
+	EXPECT_EQ(n1.getPotential(),0);
 }
 
 TEST (NeuronTest, Recieve){
@@ -68,15 +76,3 @@ TEST (NeuronTest, Recieve){
 	EXPECT_EQ(n2.getIncomingSpikes()[15],weight); //15 derniere case du buffer car t=1 15%1=15
 	
 }
-
-
-
-
-
-
-
-
-	
-	
-
-
