@@ -1,0 +1,102 @@
+\section{Network Class Reference}
+\label{class_network}\index{Network@{Network}}
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ Network} ()
+\item 
+std\+::array$<$ std\+::array$<$ double,\textbf{ nb\+\_\+neurons\+\_\+} $>$, \textbf{ nb\+\_\+neurons\+\_\+} $>$ \textbf{ get\+Current\+Weights} () const
+\item 
+unsigned int \textbf{ get\+Targets} (unsigned int from, unsigned int to) const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr long unsigned int \textbf{ nb\+\_\+excit\+\_\+} = 10000
+\item 
+static constexpr long unsigned int \textbf{ nb\+\_\+inhib\+\_\+} = 2500
+\item 
+static constexpr long unsigned int \textbf{ nb\+\_\+neurons\+\_\+} = \textbf{ nb\+\_\+inhib\+\_\+} + \textbf{ nb\+\_\+excit\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The class Networks manages the interaction between the neurons 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\label{class_network_a3cc2fb4f8fa4d507077e8da85ce5a1c8}} 
+\index{Network@{Network}!Network@{Network}}
+\index{Network@{Network}!Network@{Network}}
+\subsubsection{Network()}
+{\footnotesize\ttfamily Network\+::\+Network (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Constructor creates all the connection between the neurons, it asscribes the amplitude of the postsynaptic currrent corresponding to the nature of the neuron (excitatory or inhibitory), and set random connexions (2500 inhibitory and 10000 excitatory) following an uniform distibution
+
+Constructor Initialize all the connexions at 0 -\/$>$ not connected
+
+Each compartment of network corresponds to the indices of my neurons
+
+initialization of the amplitude of the postsynaptic current (J=0.\+1mV) of the excitatory neurons The excitatory are the first 10000 elements of my\+\_\+network
+
+initialization of the amplitude of the postsynaptic current (J=0.\+5mV) of the inhibitory neurons The inhibitory are the last 2500 elements of my\+\_\+network
+
+Creation of a random device
+
+The random generator follows a uniform distribution with the numbers 0 -\/ nb\+\_\+excit\+\_\+-\/1(=9999)
+
+Creates randomly the connexion that neuron with index i receives from excitatory neurons (Ce\+\_\+=1000)
+
+The random generator follows a uniform distribution with the numbers nb\+\_\+excit\+\_\+(10000) -\/ nb\+\_\+neurons\+\_\+-\/1(12500-\/1)
+
+Creates randomly the connexion that neuron with index i receives from inhibitory neurons (Ci\+\_\+=250)
+
+\subsection{Member Function Documentation}
+\mbox{\label{class_network_a0d581a460a41bfa8772ed2e7e2249a44}} 
+\index{Network@{Network}!get\+Current\+Weights@{get\+Current\+Weights}}
+\index{get\+Current\+Weights@{get\+Current\+Weights}!Network@{Network}}
+\subsubsection{get\+Current\+Weights()}
+{\footnotesize\ttfamily std\+::array$<$ std\+::array$<$ double,\textbf{ Network\+::nb\+\_\+neurons\+\_\+} $>$, \textbf{ Network\+::nb\+\_\+neurons\+\_\+} $>$ Network\+::get\+Current\+Weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Getter current\+\_\+weights\+\_\+ is a tab with the amplitude of the postsynaptic current corresponding to each pair of neuron [i][j] if i is inhibitory, current\+\_\+weights\+\_\+[i][j] =0.\+5 mV, if i is excitatory current\+\_\+weights\+\_\+[i][j]=0.\+1mV \begin{DoxyReturn}{Returns}
+current\+\_\+weights\+\_\+
+\end{DoxyReturn}
+Getters \mbox{\label{class_network_a031210fc8c612d28accd7704a6bb7d8f}} 
+\index{Network@{Network}!get\+Targets@{get\+Targets}}
+\index{get\+Targets@{get\+Targets}!Network@{Network}}
+\subsubsection{get\+Targets()}
+{\footnotesize\ttfamily unsigned int Network\+::get\+Targets (\begin{DoxyParamCaption}\item[{unsigned int}]{from,  }\item[{unsigned int}]{to }\end{DoxyParamCaption}) const}
+
+Getter \begin{DoxyReturn}{Returns}
+targets\+\_\+ the number of time the neuron(to) receives postsynaptic current from neuron(from) 
+\end{DoxyReturn}
+Check if n from is connected to n to
+
+\subsection{Member Data Documentation}
+\mbox{\label{class_network_a64e5e7b7e754525049fe14f426e50c31}} 
+\index{Network@{Network}!nb\+\_\+excit\+\_\+@{nb\+\_\+excit\+\_\+}}
+\index{nb\+\_\+excit\+\_\+@{nb\+\_\+excit\+\_\+}!Network@{Network}}
+\subsubsection{nb\+\_\+excit\+\_\+}
+{\footnotesize\ttfamily constexpr long unsigned int Network\+::nb\+\_\+excit\+\_\+ = 10000\hspace{0.3cm}{\ttfamily [static]}}
+
+static constant of the class \doxyref{Network}{p.}{class_network}, need to be accessible from outside, no getters becuase cannot have const static methodsnb\+\_\+excit\+\_\+ corresponds to the number of excitatory neurons in a network \mbox{\label{class_network_a7895d120bee87e9f424e30c138644a8e}} 
+\index{Network@{Network}!nb\+\_\+inhib\+\_\+@{nb\+\_\+inhib\+\_\+}}
+\index{nb\+\_\+inhib\+\_\+@{nb\+\_\+inhib\+\_\+}!Network@{Network}}
+\subsubsection{nb\+\_\+inhib\+\_\+}
+{\footnotesize\ttfamily constexpr long unsigned int Network\+::nb\+\_\+inhib\+\_\+ = 2500\hspace{0.3cm}{\ttfamily [static]}}
+
+nb\+\_\+inhib\+\_\+ corresponds to the number of inhibitory neurons in a network \mbox{\label{class_network_ad7a76d5072686bd6f728f21c132c7cd5}} 
+\index{Network@{Network}!nb\+\_\+neurons\+\_\+@{nb\+\_\+neurons\+\_\+}}
+\index{nb\+\_\+neurons\+\_\+@{nb\+\_\+neurons\+\_\+}!Network@{Network}}
+\subsubsection{nb\+\_\+neurons\+\_\+}
+{\footnotesize\ttfamily constexpr long unsigned int Network\+::nb\+\_\+neurons\+\_\+ = \textbf{ nb\+\_\+inhib\+\_\+} + \textbf{ nb\+\_\+excit\+\_\+}\hspace{0.3cm}{\ttfamily [static]}}
+
+nb\+\_\+inhib\+\_\+ corresponds to the number of neurons in a network 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Network.\+hpp\item 
+Network.\+cpp\end{DoxyCompactItemize}

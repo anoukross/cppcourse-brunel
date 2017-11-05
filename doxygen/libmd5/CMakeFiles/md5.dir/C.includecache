@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/anoukrossier/Documents/EPFL/BA3/Prog/Neuronint/doxygen/libmd5/md5.c
+string.h
+-
+sys/types.h
+-
+md5.h
+/Users/anoukrossier/Documents/EPFL/BA3/Prog/Neuronint/doxygen/libmd5/md5.h
+
+/Users/anoukrossier/Documents/EPFL/BA3/Prog/Neuronint/doxygen/libmd5/md5.h
+md5_loc.h
+/Users/anoukrossier/Documents/EPFL/BA3/Prog/Neuronint/doxygen/libmd5/md5_loc.h
+
+/Users/anoukrossier/Documents/EPFL/BA3/Prog/Neuronint/doxygen/libmd5/md5_loc.h
+
