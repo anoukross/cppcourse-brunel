@@ -41,12 +41,13 @@ Network::Network()
 				 * Creates randomly the connexion that neuron with index i receives from excitatory neurons
 				 * targets_[i][j] means that neuron i is a target of neuron j
 				*/
-				targets_[i][j]=dis_e(gen);
+				unsigned int random_index(dis_e(gen));
+				targets_[i][j]=random_index;
 
 				/**
 				 * add the index i to the outcoming_connexions_ tab of neuron j
 				 */
-				my_network_[j].setOutcomingConnexions(i);
+				my_network_[random_index].setOutcomingConnexions(i);
 			}
 		}else{
 			/**initialization of the amplitude of the postsynaptic current (ji_=g_*je_ =-0.5mV) of the inhibitory neurons
@@ -62,12 +63,13 @@ Network::Network()
 				 * Creates randomly the connexion that neuron with index i receives from inhibitory neurons
 				 * targets_[i][j] means that neuron i is a target of neuron j
 				*/
-				targets_[i][j]=dis_i(gen);
+				unsigned int random_index(dis_i(gen));
+				targets_[i][j]=random_index;
 
 				/**
 				 * add the index i to the outcoming_connexions_ tab of neuron j
 				 */
-				my_network_[j].setOutcomingConnexions(i);
+				my_network_[random_index].setOutcomingConnexions(i);
 
 			}
 		}
@@ -110,9 +112,9 @@ std::vector<unsigned int> Network::update(unsigned int time){
 		assert(i< nb_neurons_);
 		if(my_network_[i].update(0, time)){ /**< check whether neuron i has spiked*/
 			assert(my_network_[i].getSpikesNumber()>0);
-			if(time%10==0){ /**< sampling of the values every 10 seconds*/
+			//if(time%10==0){ /**< sampling of the values every 10 seconds*/
 				index_of_spikers.push_back(i);
-			}
+			//}
 			std::vector<unsigned int> outcoming_connex(my_network_[i].getOutcomingConnexions()); /**< tab containing all the target of neuron i */
 			for(unsigned int j(0); j<outcoming_connex.size();++j){
 				assert(j<outcoming_connex.size());

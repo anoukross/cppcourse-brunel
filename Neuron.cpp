@@ -15,12 +15,6 @@ Neuron::Neuron(unsigned int index, double v)
 	for(unsigned int i(0);i<dmax_;++i){
 		incoming_spikes_[i]=0.0;
 	}
-
-	/**
-	 * To be sure that when a neuron is created, it has no spike time and no outcoming connexion
-	 */
-	spikes_time_.clear();
-	outcoming_connexions_.clear();
 }
 
 /**
