@@ -2,9 +2,6 @@
 #define EXPERIMENT_HPP
 
 #include "Network.hpp"
-#include "Neuron.hpp"
-
-
 
 /**
  *  The Experiment class

@@ -76,9 +76,9 @@ class Network{
 
 		/**
 		 * targets_ is a tab containing the connexions of all the neurons of a network
-		 * the line targets_[i] contains the indices of all the neurons that send postsynaptic weight to neuron i
+		 * the line connexions_[i] contains the indices of all the neurons that send postsynaptic weight to neuron i
 		*/
-		std::vector<std::vector<unsigned int>> targets_;
+		std::vector<std::vector<unsigned int>> connexions_;
 
 		/**
 		 * weight_ is a tab containing the weight associated with all my neurons

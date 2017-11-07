@@ -24,40 +24,41 @@ double Neuron::getPotential() const{
 	return v_;
 }
 
-unsigned int Neuron::getIndex() const{
-	assert(index_<12500);
-	return index_;
-}
-
-std::vector<unsigned int> Neuron::getSpikesTime() const{
-	return spikes_time_;
-}
-
-unsigned int Neuron::getSpikesNumber() const{
-	return spikes_number_;
-}
-
-std::array<double, Neuron::dmax_> Neuron::getIncomingSpikes() const{
-	return incoming_spikes_;
-}
-
-std::vector<unsigned int> Neuron::getOutcomingConnexions() const{
-	return outcoming_connexions_;
-}
-
 double Neuron::getResistance() const{
 	return resistance_;
 }
 
+
 double Neuron::getDelay() const{
 	return delay_;
 }
+
 
 unsigned int Neuron::getClock() const{
 
 	return clock_;
 }
 
+unsigned int Neuron::getIndex() const{
+	assert(index_<12500);
+	return index_;
+}
+
+unsigned int Neuron::getSpikesNumber() const{
+	return spikes_number_;
+}
+
+std::vector<unsigned int> Neuron::getSpikesTime() const{
+	return spikes_time_;
+}
+
+std::vector<unsigned int> Neuron::getOutcomingConnexions() const{
+	return outcoming_connexions_;
+}
+
+std::array<double, Neuron::dmax_> Neuron::getIncomingSpikes() const{
+	return incoming_spikes_;
+}
 
 /**
 *  Setters
