@@ -1,7 +1,5 @@
 #include "Experiment.hpp"
 
-using namespace std;
-
 /**
  * The main program
 */
