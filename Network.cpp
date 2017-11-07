@@ -112,9 +112,9 @@ std::vector<unsigned int> Network::update(unsigned int time){
 		assert(i< nb_neurons_);
 		if(my_network_[i].update(0, time)){ /**< check whether neuron i has spiked*/
 			assert(my_network_[i].getSpikesNumber()>0);
-			//if(time%10==0){ /**< sampling of the values every 10 seconds*/
+			if(time%10==0){ /**< sampling of the values every 10 seconds*/
 				index_of_spikers.push_back(i);
-			//}
+			}
 			std::vector<unsigned int> outcoming_connex(my_network_[i].getOutcomingConnexions()); /**< tab containing all the target of neuron i */
 			for(unsigned int j(0); j<outcoming_connex.size();++j){
 				assert(j<outcoming_connex.size());
