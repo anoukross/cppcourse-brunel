@@ -109,18 +109,20 @@ double Network::getWeight(unsigned int index) const{
 std::vector<unsigned int> Network::update(unsigned int time){
 	std::vector<unsigned int> index_of_spikers; /**< contains the index of the neurons that spikes at this time, if this time is a multiple of 10 -> if h_ is an integer in ms*/
 	for(unsigned int i(0); i<Network::nb_neurons_; ++i){
-		assert(i< nb_neurons_);
+		assert(i<nb_neurons_);
 		if(my_network_[i].update(0, time)){ /**< check whether neuron i has spiked*/
 			assert(my_network_[i].getSpikesNumber()>0);
 			if(time%10==0){ /**< sampling of the values every 10 seconds*/
 				index_of_spikers.push_back(i);
 			}
 			std::vector<unsigned int> outcoming_connex(my_network_[i].getOutcomingConnexions()); /**< tab containing all the target of neuron i */
-			for(unsigned int j(0); j<outcoming_connex.size();++j){
-				assert(j<outcoming_connex.size());
-				assert(i<weights_.size());
-				sendSpikes(outcoming_connex[j],weights_[i]); /**< call sendSpikes so that neuron j(target of neuron i) can receive the pps weight from neuron i */
-			}
+				if(!outcoming_connex.empty()){ /**<To verify that neuron i targets other neurons */
+					for(unsigned int j(0); j<outcoming_connex.size();++j){
+						assert(j<outcoming_connex.size());
+						assert(i<weights_.size());
+						sendSpikes(outcoming_connex[j],weights_[i]); /**< call sendSpikes so that neuron j(target of neuron i) can receive the pps weight from neuron i */
+					}
+				}
 		}
 	}
 	return index_of_spikers;
